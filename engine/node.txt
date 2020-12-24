@@ -1,0 +1,178 @@
+{
+  "MAX_ID": 4,
+  "name": "test",
+  "nodes": [
+    {
+      "posX": 499.0,
+      "posY": 328.0,
+      "sizeX": 150.0,
+      "sizeY": 100.0,
+      "color": [
+        1.0,
+        0.2,
+        0.2
+      ],
+      "title": "Start",
+      "iHandles": [],
+      "oHandles": [
+        {
+          "handleType": "OUTPUT",
+          "name": "Run",
+          "handleDataType": "FLOW"
+        },
+        {
+          "handleType": "OUTPUT",
+          "name": "args",
+          "handleDataType": "STRING"
+        }
+      ],
+      "cmd": {
+        "action": "START"
+      },
+      "id": -1
+    },
+    {
+      "posX": 552.0,
+      "posY": 449.0,
+      "sizeX": 100.0,
+      "sizeY": 80.0,
+      "color": [
+        0.2,
+        0.2,
+        1.0
+      ],
+      "title": "get Int",
+      "iHandles": [],
+      "oHandles": [
+        {
+          "handleType": "OUTPUT",
+          "name": "value",
+          "handleDataType": "INT"
+        }
+      ],
+      "cmd": {
+        "action": "GET_VAR",
+        "variables": [
+          {
+            "name": "test_int",
+            "defaultValue": 42.0
+          }
+        ]
+      },
+      "id": -1
+    },
+    {
+      "posX": 836.0,
+      "posY": 355.0,
+      "sizeX": 100.0,
+      "sizeY": 100.0,
+      "color": [
+        0.9,
+        0.9,
+        0.9
+      ],
+      "title": "Print",
+      "iHandles": [
+        {
+          "handleType": "INPUT",
+          "posX": 947.0,
+          "posY": 319.0,
+          "radius": 6.0,
+          "name": "In",
+          "handleDataType": "FLOW",
+          "innerColor": -6710887
+        },
+        {
+          "handleType": "INPUT",
+          "posX": 947.0,
+          "posY": 344.0,
+          "radius": 6.0,
+          "name": "data",
+          "handleDataType": "STRING",
+          "innerColor": -6710887
+        }
+      ],
+      "oHandles": [
+        {
+          "handleType": "OUTPUT",
+          "name": "Out",
+          "handleDataType": "FLOW"
+        }
+      ],
+      "cmd": {
+        "action": "PRINT"
+      },
+      "id": -1
+    },
+    {
+      "posX": 688.0,
+      "posY": 456.0,
+      "sizeX": 100.0,
+      "sizeY": 80.0,
+      "color": [
+        0.2,
+        0.2,
+        1.0
+      ],
+      "title": "Int to String",
+      "iHandles": [
+        {
+          "handleType": "INPUT",
+          "posX": 799.0,
+          "posY": 420.0,
+          "radius": 6.0,
+          "name": "data",
+          "handleDataType": "INT",
+          "innerColor": -6710887
+        }
+      ],
+      "oHandles": [
+        {
+          "handleType": "OUTPUT",
+          "name": "out",
+          "handleDataType": "STRING"
+        }
+      ],
+      "cmd": {
+        "action": "CONVERT"
+      },
+      "id": -1
+    }
+  ],
+  "connections": [
+    {
+      "oh": {
+        "nodeId": -1,
+        "hIndex": 0
+      },
+      "ih": {
+        "nodeId": -1,
+        "hIndex": 0
+      }
+    },
+    {
+      "oh": {
+        "nodeId": -1,
+        "hIndex": 0
+      },
+      "ih": {
+        "nodeId": -1,
+        "hIndex": 1
+      }
+    },
+    {
+      "oh": {
+        "nodeId": -1,
+        "hIndex": 0
+      },
+      "ih": {
+        "nodeId": -1,
+        "hIndex": 0
+      }
+    }
+  ],
+  "move": {
+    "x": -250.0,
+    "y": -120.0
+  }
+}

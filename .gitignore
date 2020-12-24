@@ -1,0 +1,4 @@
+engine/.idea
+engine/build
+engine/.gradle
+*.log
