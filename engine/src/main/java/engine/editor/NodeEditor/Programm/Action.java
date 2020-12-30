@@ -13,5 +13,6 @@ public enum Action {
     MOVE_X,
     MOVE_Y,
     MOVE_P,
-    KEY_DOWN
+    KEY_DOWN,
+    ADD
 }

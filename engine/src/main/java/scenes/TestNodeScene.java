@@ -101,9 +101,7 @@ public class TestNodeScene extends Scene {
     @Override
     public void init() {
         this.camera = new Camera(new Vector2f(-Settings.ViewportWidth / 2.0f, -Settings.ViewportHeight / 2.0f));
-        //activeGameObject = gameObjetcs.get(0);
-        //editorDictionary.put("test", new NodeEditor("test")); //TODO: Only for test;
-        loadResources();
+         loadResources();
     }
 
     @Override
@@ -226,7 +224,7 @@ public class TestNodeScene extends Scene {
             ImGui.separator();
             if (ImGui.beginMenu("Run")){
                 if(ImGui.menuItem("Run Scene")){
-                    Window.get().pushScene(new RuntimeScene(gameObjetcs, editorDictionary.values()));//TODO: Parse runtime data
+                    Window.get().pushScene(new RuntimeScene(gameObjetcs, editorDictionary.values()));
                 }
                 ImGui.endMenu();
             }

@@ -89,19 +89,8 @@ public class NodeEditor {
         if (ImGui.beginMenuBar()){
             ImGui.separator();
             if(ImGui.menuItem("Compile")){
-                //TODO: Add compilation
                 compileToDiskAndProvideProgramm();
             }
-//            if (ImGui.menuItem("Run")){
-//                //TODO: Only for testing
-//                JsonArray ar = NodeEditorRuntimeSerializer.getRuntimeDataForObjectNodes(this);
-//                List<Tuple<JsonArray, GameObject>> l = new ArrayList<>();
-//                l.add(new Tuple<>(ar, Window.getScene().findObjwithID(objID)));
-//                VirtualMachine machine = new VirtualMachine(l);
-//                while (machine.hasStepsLeft()){
-//                    machine.step();
-//                }
-//            }
             ImGui.separator();
             ImGui.endMenuBar();
 
@@ -324,7 +313,8 @@ public class NodeEditor {
             "move/Move x Position",
             "move/Move y Position",
             "move/Move Position",
-            "event/Key Pressed"
+            "event/Key Pressed",
+            "math/Int Add"
     };
     transient String folders = "";
     transient ImString searchString = new ImString();
@@ -380,7 +370,7 @@ public class NodeEditor {
 
 
         ImGui.setNextItemWidth(150);
-        for (int i = 0; i < items.size(); i++) { //TODO: Fix FOlder signals
+        for (int i = 0; i < items.size(); i++) { //TODO: Fix Folder signals
             if (ImGui.menuItem(items.get(i).x)) {
                 if (items.get(i).y) {
                     folders += items.get(i).x + "/";

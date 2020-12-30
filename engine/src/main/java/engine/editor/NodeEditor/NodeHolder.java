@@ -252,8 +252,26 @@ public class NodeHolder {
                            new OutputHandle(HandleDataType.FLOW, "action")
                    },
                    new ActionCommand(Action.KEY_DOWN,
-                           Arrays.asList(new Variable("_KeyCode", new JsonPrimitive("Space"), VarType.KEY))) //TODO: Add key arg
+                           Arrays.asList(new Variable("_KeyCode", new JsonPrimitive("Space"), VarType.KEY)))
 
+           );
+       }
+       if (name.equals("Int Add")){
+           return new Node(
+                   0,0,80, 100,
+                   new Vector3f(0.2f,1,0.2f),
+                   "+",
+                   new InputHandle[]{
+                           new InputHandle(HandleDataType.INT, "in1"),
+                   new InputHandle(HandleDataType.INT, "in2")
+                   },
+                   new OutputHandle[]{
+                           new OutputHandle(HandleDataType.INT, "out")
+                   },
+                   new ActionCommand(Action.ADD, Arrays.asList(
+                           new Variable("_in1", new JsonPrimitive(42), VarType.INT),
+                           new Variable("_in2", new JsonPrimitive(42), VarType.INT)
+                   ))
            );
        }
        assert false : "Unavailable Node";

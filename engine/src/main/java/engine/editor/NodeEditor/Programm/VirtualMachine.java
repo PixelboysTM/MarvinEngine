@@ -246,7 +246,7 @@ public class VirtualMachine {
                 int i = getIntegerParam(p, no, obj.get("data").getAsJsonArray().get(0).getAsJsonObject().get("identifier").getAsString());
                 return String.valueOf(i);
         }
-        return "Not finished";
+        return "Not finished cmd: " + obj.get("cmd").getAsString();
     }
 
     /**
@@ -271,6 +271,45 @@ public class VirtualMachine {
                 si = var.get("default").getAsString();
                 si = si.replace(".0", "");
                 return Integer.parseInt(si);
+            case "ADD":
+                JsonArray conns = obj.get("data").getAsJsonArray();
+                if (conns.size() == 0){
+                    String var1s = obj.get("vars").getAsJsonArray().get(0).getAsJsonObject().get("default").getAsString();
+                    var1s = var1s.replace(".0", "");
+                    int var1 = Integer.parseInt(var1s);
+
+                    String var2s = obj.get("vars").getAsJsonArray().get(1).getAsJsonObject().get("default").getAsString();
+                    var2s = var2s.replace(".0", "");
+                    int var2 = Integer.parseInt(var2s);
+
+                    return var1 + var2;
+                } else if( conns.size() == 1){
+                    JsonObject handle = obj.get("data").getAsJsonArray().get(0).getAsJsonObject();
+                    String hName = handle.get("key").getAsString();
+                    int Ivar = Integer.MIN_VALUE;
+                    if (hName.endsWith("1")){
+                        String vars = obj.get("vars").getAsJsonArray().get(1).getAsJsonObject().get("default").getAsString();
+                        vars = vars.replace(".0", "");
+                        Ivar = Integer.parseInt(vars);
+
+                    }else {
+                        String vars = obj.get("vars").getAsJsonArray().get(0).getAsJsonObject().get("default").getAsString();
+                        vars = vars.replace(".0", "");
+                        Ivar = Integer.parseInt(vars);
+
+                    }
+                    int value2 = getIntegerParam(p, handle.get("value").getAsInt(), handle.get("identifier").getAsString());
+                    return Ivar + value2;
+                }else{
+                    JsonObject handle1 = obj.get("data").getAsJsonArray().get(0).getAsJsonObject();
+                    int v1 = getIntegerParam(p, handle1.get("value").getAsInt(), handle1.get("identifier").getAsString());
+
+                    JsonObject handle2 = obj.get("data").getAsJsonArray().get(1).getAsJsonObject();
+                    int v2 = getIntegerParam(p, handle2.get("value").getAsInt(), handle1.get("identifier").getAsString());
+
+                    return v1 + v2;
+                }
+
         }
         return -1;
     }

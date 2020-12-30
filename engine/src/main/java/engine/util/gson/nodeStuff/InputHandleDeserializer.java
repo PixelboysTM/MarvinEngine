@@ -11,7 +11,7 @@ public class InputHandleDeserializer implements JsonDeserializer<InputHandle> {
     public InputHandle deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         JsonObject object = json.getAsJsonObject();
 
-        HandleDataType hType = context.deserialize(object.get("handleDataType"), HandleDataType.class); //TODO: Serialize enum as int
+        HandleDataType hType = context.deserialize(object.get("handleDataType"), HandleDataType.class);
         String name = object.get("name").getAsString();
 
         return new InputHandle(hType, name);

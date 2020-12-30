@@ -161,7 +161,7 @@ public class ProjectPacker {
             int id = Integer.parseInt(name);
             ((TestNodeScene)Window.getScene()).setEditorfromData(id, toString);
         }
-        //TODO: Make data
+        //TODO: Make data (Image data)
     }
 
     public static void clearProjectLocation() {
