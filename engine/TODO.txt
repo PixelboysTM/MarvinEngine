@@ -1,1 +1,3 @@
 TODO: Add action to nodes
+TODO: Add dt Node
+TODO: Add logical operations

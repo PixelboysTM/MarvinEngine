@@ -18,10 +18,7 @@ import imgui.type.ImBoolean;
 import org.joml.Vector2f;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 
@@ -190,7 +187,7 @@ public class TestNodeScene extends Scene {
         if (ImGui.beginMainMenuBar()) {
             if (ImGui.beginMenu("File")) {
                 if (ImGui.menuItem("New")) {
-                    Window.get().changeScene(2);
+                    Window.get().setSingle(new TestNodeScene());
                     ProjectPacker.clearProjectLocation();
                 }
                 if (ImGui.menuItem("Open")) {
@@ -210,6 +207,7 @@ public class TestNodeScene extends Scene {
                     ProjectPacker.save();
                     glfwSetWindowShouldClose(Window.windowHandle(), true);
                 }
+
                 ImGui.endMenu();
             }
             if (ImGui.beginMenu("Edit")) {
@@ -224,6 +222,13 @@ public class TestNodeScene extends Scene {
                     Window.get().setShowConsole(is.get());
                 }
                 ImGui.end();
+            }
+            ImGui.separator();
+            if (ImGui.beginMenu("Run")){
+                if(ImGui.menuItem("Run Scene")){
+                    Window.get().pushScene(new RuntimeScene(gameObjetcs, editorDictionary.values()));//TODO: Parse runtime data
+                }
+                ImGui.endMenu();
             }
             ImGui.endMainMenuBar();
         }
@@ -242,7 +247,7 @@ public class TestNodeScene extends Scene {
         return editorDictionary.values().toArray(new NodeEditor[]{});
     }
 
-    public void setEditorfromData(String name, String data) {
+    public void setEditorfromData(int id, String data) {
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()
                 .registerTypeAdapter(Node.class, new NodeDeserializer())
@@ -254,10 +259,6 @@ public class TestNodeScene extends Scene {
                 .registerTypeAdapter(HandleDataType.class, new HandleDataTypeSerializer())
                 .create();
 
-
-
-        NodeEditorBlueprint blueprint = gson.fromJson(data, NodeEditorBlueprint.class);
-       int id = blueprint.objID;
        GameObject obj = findObjwithID(id);
        if (obj == null)return;
 
@@ -267,13 +268,14 @@ public class TestNodeScene extends Scene {
         editorDictionary.get(obj).setData(data);
     }
 
-    private GameObject findObjwithID(int id) {
-        for (GameObject o :
-                gameObjetcs) {
-            if (o.getUid() == id)
-                return o;
+
+
+    @Override
+    public void UpdateEditors() {
+        for (NodeEditor edits :
+                editorDictionary.values()) {
+            edits.setName(findObjwithID( edits.getObjID()));
         }
-        return null;
     }
 }
 

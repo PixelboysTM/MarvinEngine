@@ -29,12 +29,21 @@ public class NodeEditorDeserializer implements JsonDeserializer<NodeEditorBluepr
         Connection[] cons = new Connection[connectionBlueprints.length];
         for (int i = 0; i < cons.length; i++) {
             ConnectionBlueprint bp = connectionBlueprints[i];
-            Node in = nodes[bp.InodeID];
+            Node in = getNodeWithId(nodes, bp.InodeID);
             InputHandle ih = in.getInputHandles()[bp.IhID];
-            Node on = nodes[bp.OnodeId];
+            Node on = getNodeWithId(nodes, bp.OnodeId);
             OutputHandle oh = on.getOutputHandles()[bp.OhID];
             cons[i] = new Connection(ih,oh);
         }
         return cons;
+    }
+    private Node getNodeWithId(Node[] nodes, int id){
+        for (int i = 0; i < nodes.length; i++) {
+            if (nodes[i].getID() == id)
+                return nodes[i];
+        }
+
+        assert false : "No node with id check save file version";
+        return null;
     }
 }

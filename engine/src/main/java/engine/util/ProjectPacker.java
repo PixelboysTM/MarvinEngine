@@ -75,7 +75,7 @@ public class ProjectPacker {
             out.closeEntry();
 
             for (NodeEditor editor : ((TestNodeScene)Window.getScene()).getScriptEditors()){
-                out.putNextEntry(new ZipEntry("scripts/" + editor.getName() + ".edit"));
+                out.putNextEntry(new ZipEntry("scripts/" + editor.getObjID() + ".edit"));
                 out.write(editor.getSaveData().getBytes(StandardCharsets.UTF_8));
                 out.closeEntry();
             }
@@ -141,10 +141,10 @@ public class ProjectPacker {
                     scripts.add(t);
             }
             for (int i = 0; i < scenes.size(); i++) {
-                handleFileData(scenes.get(i).x, scripts.get(i).y);
+                handleFileData(scenes.get(i).x, scenes.get(i).y);
             }
             for (int i = 0; i < scripts.size(); i++) {
-                handleFileData(scenes.get(i).x, scripts.get(i).y);
+                handleFileData(scripts.get(i).x, scripts.get(i).y);
             }
 
         } catch (IOException e) {
@@ -158,7 +158,8 @@ public class ProjectPacker {
         }else if(name.startsWith("scripts/")){
             name = name.substring(8);
             name = name.replace(".edit", "");
-            ((TestNodeScene)Window.getScene()).setEditorfromData(name, toString);
+            int id = Integer.parseInt(name);
+            ((TestNodeScene)Window.getScene()).setEditorfromData(id, toString);
         }
         //TODO: Make data
     }

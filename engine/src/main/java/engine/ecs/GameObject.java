@@ -85,6 +85,7 @@ public class GameObject {
         string.set(name, false);
        if( ImGui.inputText("Name", string)){
            name = string.get().trim();
+           Window.getScene().UpdateEditors();
        }
        ImGui.sameLine();
       if( ImGui.button(" + ")){

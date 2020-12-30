@@ -1,6 +1,7 @@
 package engine.editor.NodeEditor.Programm;
 
 import com.google.gson.JsonPrimitive;
+import engine.input.KeyCodes;
 import imgui.ImGui;
 import imgui.type.ImBoolean;
 import imgui.type.ImInt;
@@ -12,6 +13,7 @@ public class Variable {
     private VarType varType;
     private transient String[] values;
     private transient VarType[] types;
+    private static final transient String[] keyCodes = KeyCodes.KEY_CODES.keySet().toArray(new String[0]);
     public Variable(String name, JsonPrimitive defaultValue, VarType type) {
         this.defaultValue = defaultValue;
         this.name = name;
@@ -46,7 +48,7 @@ public class Variable {
                 values[i] = types[i].name();
             }
         }
-    if (!isConstant && !name.equals("_")){
+    if (!isConstant && !name.startsWith("_")){
         ImString IMname = new ImString(name, 256);
         if(ImGui.inputText("Variable name", IMname)){
             name = IMname.get();
@@ -72,26 +74,50 @@ public class Variable {
        switch (varType){
            case STRING:
                ImString v = new ImString(defaultValue.getAsString(), 256);
+               ImGui.pushID(ImGui.getID(name));
                if (ImGui.inputText("Default", v)){
                    defaultValue = new JsonPrimitive(v.get());
                }
+               ImGui.popID();
                break;
            case BOOL:
                ImBoolean b = new ImBoolean(defaultValue.getAsBoolean());
+               ImGui.pushID(ImGui.getID(name));
                if (ImGui.checkbox("Default", b)){
                    defaultValue = new JsonPrimitive(b.get());
                }
+               ImGui.popID();
                break;
            case INT:
                ImInt i = new ImInt(defaultValue.getAsInt());
+               ImGui.pushID(ImGui.getID(name));
                if (ImGui.inputInt("Default", i)){
                    defaultValue = new JsonPrimitive(i.get());
                }
+               ImGui.popID();
+               break;
+           case KEY:
+               ImInt selected = new ImInt(indexOf(keyCodes, defaultValue.getAsString()));
+               ImGui.pushID(ImGui.getID(name));
+               if (ImGui.combo("Key to Listen to", selected, keyCodes, keyCodes.length)){
+                   defaultValue = new JsonPrimitive(keyCodes[selected.get()]);
+               }
+               ImGui.popID();
                break;
            default:
                System.out.println("<red>Error: not supported var type: " + varType);
        }
+
+    //ImGui.labelText("debug_name", name);
     }
 
+    private static <T> int indexOf(T[] list, T value){
+        for (int i = 0; i < list.length; i++) {
+            if (list[i].equals(value)){
+                return i;
+            }
+        }
+        return -1;
+    }
 
 }

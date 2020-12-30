@@ -3,6 +3,7 @@ package engine.editor.NodeEditor;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
+import engine.Window;
 import engine.ecs.GameObject;
 import engine.editor.NodeEditor.Programm.VirtualMachine;
 import engine.input.KeyListener;
@@ -80,7 +81,8 @@ public class NodeEditor {
 
     public void imgui() {
         ImGui.pushStyleVar(ImGuiStyleVar.WindowPadding, 1, 1);
-        ImGui.begin("Script: " + name, ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.MenuBar);
+
+        ImGui.begin("Script: " + name + "###NODE_EDITOR_WITH_ID_" + objID , ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.MenuBar);
 
         isFocused = ImGui.isWindowFocused();
 
@@ -90,16 +92,16 @@ public class NodeEditor {
                 //TODO: Add compilation
                 compileToDiskAndProvideProgramm();
             }
-            if (ImGui.menuItem("Run")){
-                //TODO: Only for testing
-                JsonArray ar = NodeEditorRuntimeSerializer.getRuntimeDataForObjectNodes(this);
-                List<JsonArray> l = new ArrayList<>();
-                l.add(ar);
-                VirtualMachine machine = new VirtualMachine(l);
-                while (machine.hasStepsLeft()){
-                    machine.step();
-                }
-            }
+//            if (ImGui.menuItem("Run")){
+//                //TODO: Only for testing
+//                JsonArray ar = NodeEditorRuntimeSerializer.getRuntimeDataForObjectNodes(this);
+//                List<Tuple<JsonArray, GameObject>> l = new ArrayList<>();
+//                l.add(new Tuple<>(ar, Window.getScene().findObjwithID(objID)));
+//                VirtualMachine machine = new VirtualMachine(l);
+//                while (machine.hasStepsLeft()){
+//                    machine.step();
+//                }
+//            }
             ImGui.separator();
             ImGui.endMenuBar();
 
@@ -248,6 +250,14 @@ public class NodeEditor {
             }else if (KeyListener.isKeyPressed(GLFW_KEY_DELETE) && selectedNodes.size() > 0) {
                 for (Node n :
                         selectedNodes) {
+                    for (int ic = 0; ic < connections.size(); ic++) {
+                        Connection c = connections.get(ic);
+                        if (c.getInputHandle().getNode().getID() == n.getID() || c.getOutputHandle().getNode().getID() == n.getID()){
+                            c.unbind();
+                            connections.remove(c);
+                            ic--;
+                        }
+                    }
                     nodes.remove(n);
                 }
                 selectedNodes.clear();
@@ -255,8 +265,6 @@ public class NodeEditor {
         }
         ImGui.end();
         ImGui.popStyleVar();
-
-
 
     }
 
@@ -284,6 +292,7 @@ public class NodeEditor {
         MAX_ID = blueprint.MAX_ID;
         move.set(blueprint.move);
         name = blueprint.name;
+        objID = blueprint.objID;
         nodes = new ArrayList<>(blueprint.nodes);
         connections = new ArrayList<>(blueprint.connections);
     }
@@ -308,7 +317,14 @@ public class NodeEditor {
             "Useless Folder/Print",
             "Useless Folder/Int to String",
             "Int Variable set",
-            "Int constant"
+            "Int constant",
+            "move/Set x Position",
+            "move/Set y Position",
+            "move/Set Position",
+            "move/Move x Position",
+            "move/Move y Position",
+            "move/Move Position",
+            "event/Key Pressed"
     };
     transient String folders = "";
     transient ImString searchString = new ImString();
@@ -434,5 +450,13 @@ public class NodeEditor {
 
     public boolean isFocused() {
         return isFocused;
+    }
+
+    public int getObjID() {
+        return objID;
+    }
+
+    public void setName(GameObject objwithID) {
+        name = objwithID.getName();
     }
 }

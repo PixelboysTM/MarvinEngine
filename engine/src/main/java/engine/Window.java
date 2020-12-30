@@ -18,13 +18,13 @@ import org.lwjgl.opengl.GL;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.stb.STBImage.stbi_load;
-import static org.lwjgl.stb.STBImage.stbi_set_flip_vertically_on_load;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Window {
@@ -40,26 +40,26 @@ public class Window {
 
     private static Window window = null;
 
-    public Scene currentScene;
+    public ArrayList<Scene> sceneStack;
 
-    public void changeScene(int newScene){
-        switch (newScene){
-            case 0:
-                currentScene = new LevelEditorScene();
-                break;
-            case 1:
-                currentScene = new LevelScene();
-                break;
-            case 2:
-                currentScene = new TestNodeScene();
-                break;
-            default:
-                assert false : "Unknown Scene" + newScene;
-                break;
-        }
+    public void setSingle(Scene scene){
+        sceneStack.clear();
+        pushScene(scene);
+    }
+
+    public void pushScene(Scene newScene){
+        sceneStack.add(0, newScene);
         //currentScene.load();
-        currentScene.init();
-        currentScene.start();
+        newScene.init();
+        newScene.start();
+    }
+    public void popScene(){
+        sceneStack.remove(0);
+        if (sceneStack.size() == 0){
+            sceneStack.add(0, new LevelEditorScene());
+        }
+        sceneStack.get(0).init();
+        sceneStack.get(0).start();
     }
 
     private Window(){
@@ -164,7 +164,8 @@ public class Window {
         glfwSetWindowIcon(glfwWindow, iconBuffer);
 
         logHelper = new LogHelper();
-        changeScene(2); // TODO: StartupScene
+        sceneStack = new ArrayList<>();
+        pushScene(new TestNodeScene()); // TODO: StartupScene
     }
 
     private static void setHeigth(int height1) {
@@ -195,13 +196,13 @@ public class Window {
             //Render
             if (dt >= 0){
                 DebugDraw.draw();
-                currentScene.Update(dt);
+                sceneStack.get(0).Update(dt);
             }
             this.frameBuffer.unbind();
 
-            currentScene.lateUpdate(dt);
+            sceneStack.get(0).lateUpdate(dt);
 
-            this.imGuiLayer.update(dt, currentScene);
+            this.imGuiLayer.update(dt, sceneStack.get(0));
             glfwSwapBuffers(glfwWindow);
 
             endTime = Time.getTime();
@@ -213,7 +214,7 @@ public class Window {
 
 
     public static Scene getScene(){
-        return get().currentScene;
+        return get().sceneStack.get(0);
     }
 
     public static int getWidth(){

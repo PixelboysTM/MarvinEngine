@@ -167,4 +167,14 @@ public abstract class Scene {
     public Renderer renderer(){
         return renderer;
     }
+    public void UpdateEditors(){}
+
+    public GameObject findObjwithID(int id) {
+        for (GameObject o :
+                gameObjetcs) {
+            if (o.getUid() == id)
+                return o;
+        }
+        return null;
+    }
 }

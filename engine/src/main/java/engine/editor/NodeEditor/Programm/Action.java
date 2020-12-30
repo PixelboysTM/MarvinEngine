@@ -6,5 +6,12 @@ public enum Action {
     GET_VAR,
     PRINT,
     CONVERT,
-    GET_CONSTANT
+    GET_CONSTANT,
+    SET_X,
+    SET_Y,
+    SET_P,
+    MOVE_X,
+    MOVE_Y,
+    MOVE_P,
+    KEY_DOWN
 }
