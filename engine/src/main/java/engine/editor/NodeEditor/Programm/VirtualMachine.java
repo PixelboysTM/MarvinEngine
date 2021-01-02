@@ -175,10 +175,12 @@ public class VirtualMachine {
                     int value = getIntegerParam(p, n, aObj.get("identifier").getAsString());
                     GameObject g = programms.get(p).y;
                     g.transform.position.x = value;
+                    System.out.println("<yellow>VM_OUT: Moving" + value);
                 } else {
                     int value = vars.get(0).getAsJsonObject().get("default").getAsInt();
                     GameObject g = programms.get(p).y;
                     g.transform.position.x += value;
+                    System.out.println("<yellow>VM_OUT: Moving" + value);
                 }
                 break;
             case "MOVE_Y":
@@ -237,7 +239,7 @@ public class VirtualMachine {
     }
 
     private String getStringParam(int p, int n, String identifier) {
-        JsonObject obj = programms.get(p).x.getAsJsonArray().get(n).getAsJsonObject();
+        JsonObject obj = getCmdWithId(p,n);
         switch (obj.get("cmd").getAsString()) {
             case "START":
                 return obj.get("vars").getAsJsonArray().get(0).getAsJsonObject().get("default").getAsString();
@@ -253,11 +255,11 @@ public class VirtualMachine {
      * Gets an Integer Param from handle
      * @param p the current programm
      * @param n the node index to acess
-     * @param asString identifier to specify handle
+     * @param identifier identifier to specify handle
      * @return the value
      */
-    private int getIntegerParam(int p, int n, String asString) {
-        JsonObject obj = programms.get(p).x.getAsJsonArray().get(n).getAsJsonObject();
+    private int getIntegerParam(int p, int n, String identifier) {
+        JsonObject obj = getCmdWithId(p, n);
         switch (obj.get("cmd").getAsString()) {
             case "SET_VAR":
             case "GET_VAR":
@@ -271,6 +273,8 @@ public class VirtualMachine {
                 si = var.get("default").getAsString();
                 si = si.replace(".0", "");
                 return Integer.parseInt(si);
+
+            //MAth TODO: Refactor to one with less code
             case "ADD":
                 JsonArray conns = obj.get("data").getAsJsonArray();
                 if (conns.size() == 0){
@@ -309,7 +313,118 @@ public class VirtualMachine {
 
                     return v1 + v2;
                 }
+            case "SUB":
+                JsonArray conn = obj.get("data").getAsJsonArray();
+                if (conn.size() == 0){
+                    String var1s = obj.get("vars").getAsJsonArray().get(0).getAsJsonObject().get("default").getAsString();
+                    var1s = var1s.replace(".0", "");
+                    int var1 = Integer.parseInt(var1s);
 
+                    String var2s = obj.get("vars").getAsJsonArray().get(1).getAsJsonObject().get("default").getAsString();
+                    var2s = var2s.replace(".0", "");
+                    int var2 = Integer.parseInt(var2s);
+
+                    return var1 - var2;
+                } else if( conn.size() == 1){
+                    JsonObject handle = obj.get("data").getAsJsonArray().get(0).getAsJsonObject();
+                    String hName = handle.get("key").getAsString();
+                    int Ivar = Integer.MIN_VALUE;
+                    int value2 = getIntegerParam(p, handle.get("value").getAsInt(), handle.get("identifier").getAsString());
+                    if (hName.endsWith("1")){
+                        String vars = obj.get("vars").getAsJsonArray().get(1).getAsJsonObject().get("default").getAsString();
+                        vars = vars.replace(".0", "");
+                        Ivar = Integer.parseInt(vars);
+                        return value2 - Ivar;
+                    }else {
+                        String vars = obj.get("vars").getAsJsonArray().get(0).getAsJsonObject().get("default").getAsString();
+                        vars = vars.replace(".0", "");
+                        Ivar = Integer.parseInt(vars);
+                        return Ivar - value2;
+                    }
+                }else{
+                    JsonObject handle1 = obj.get("data").getAsJsonArray().get(0).getAsJsonObject();
+                    int v1 = getIntegerParam(p, handle1.get("value").getAsInt(), handle1.get("identifier").getAsString());
+
+                    JsonObject handle2 = obj.get("data").getAsJsonArray().get(1).getAsJsonObject();
+                    int v2 = getIntegerParam(p, handle2.get("value").getAsInt(), handle1.get("identifier").getAsString());
+
+                    return v1 - v2;
+                }
+            case "MUL":
+                JsonArray conns2 = obj.get("data").getAsJsonArray();
+                if (conns2.size() == 0){
+                    String var1s = obj.get("vars").getAsJsonArray().get(0).getAsJsonObject().get("default").getAsString();
+                    var1s = var1s.replace(".0", "");
+                    int var1 = Integer.parseInt(var1s);
+
+                    String var2s = obj.get("vars").getAsJsonArray().get(1).getAsJsonObject().get("default").getAsString();
+                    var2s = var2s.replace(".0", "");
+                    int var2 = Integer.parseInt(var2s);
+
+                    return var1 * var2;
+                } else if( conns2.size() == 1){
+                    JsonObject handle = obj.get("data").getAsJsonArray().get(0).getAsJsonObject();
+                    String hName = handle.get("key").getAsString();
+                    int Ivar = Integer.MIN_VALUE;
+                    if (hName.endsWith("1")){
+                        String vars = obj.get("vars").getAsJsonArray().get(1).getAsJsonObject().get("default").getAsString();
+                        vars = vars.replace(".0", "");
+                        Ivar = Integer.parseInt(vars);
+
+                    }else {
+                        String vars = obj.get("vars").getAsJsonArray().get(0).getAsJsonObject().get("default").getAsString();
+                        vars = vars.replace(".0", "");
+                        Ivar = Integer.parseInt(vars);
+
+                    }
+                    int value2 = getIntegerParam(p, handle.get("value").getAsInt(), handle.get("identifier").getAsString());
+                    return Ivar * value2;
+                }else{
+                    JsonObject handle1 = obj.get("data").getAsJsonArray().get(0).getAsJsonObject();
+                    int v1 = getIntegerParam(p, handle1.get("value").getAsInt(), handle1.get("identifier").getAsString());
+
+                    JsonObject handle2 = obj.get("data").getAsJsonArray().get(1).getAsJsonObject();
+                    int v2 = getIntegerParam(p, handle2.get("value").getAsInt(), handle1.get("identifier").getAsString());
+
+                    return v1 * v2;
+                }
+            case "DIV":
+                JsonArray conn3 = obj.get("data").getAsJsonArray();
+                if (conn3.size() == 0){
+                    String var1s = obj.get("vars").getAsJsonArray().get(0).getAsJsonObject().get("default").getAsString();
+                    var1s = var1s.replace(".0", "");
+                    int var1 = Integer.parseInt(var1s);
+
+                    String var2s = obj.get("vars").getAsJsonArray().get(1).getAsJsonObject().get("default").getAsString();
+                    var2s = var2s.replace(".0", "");
+                    int var2 = Integer.parseInt(var2s);
+
+                    return var1 / var2;
+                } else if( conn3.size() == 1){
+                    JsonObject handle = obj.get("data").getAsJsonArray().get(0).getAsJsonObject();
+                    String hName = handle.get("key").getAsString();
+                    int Ivar = Integer.MIN_VALUE;
+                    int value2 = getIntegerParam(p, handle.get("value").getAsInt(), handle.get("identifier").getAsString());
+                    if (hName.endsWith("1")){
+                        String vars = obj.get("vars").getAsJsonArray().get(1).getAsJsonObject().get("default").getAsString();
+                        vars = vars.replace(".0", "");
+                        Ivar = Integer.parseInt(vars);
+                        return value2 / Ivar;
+                    }else {
+                        String vars = obj.get("vars").getAsJsonArray().get(0).getAsJsonObject().get("default").getAsString();
+                        vars = vars.replace(".0", "");
+                        Ivar = Integer.parseInt(vars);
+                        return Ivar / value2;
+                    }
+                }else{
+                    JsonObject handle1 = obj.get("data").getAsJsonArray().get(0).getAsJsonObject();
+                    int v1 = getIntegerParam(p, handle1.get("value").getAsInt(), handle1.get("identifier").getAsString());
+
+                    JsonObject handle2 = obj.get("data").getAsJsonArray().get(1).getAsJsonObject();
+                    int v2 = getIntegerParam(p, handle2.get("value").getAsInt(), handle1.get("identifier").getAsString());
+
+                    return v1 / v2;
+                }
         }
         return -1;
     }

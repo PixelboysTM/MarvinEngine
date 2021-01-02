@@ -14,5 +14,8 @@ public enum Action {
     MOVE_Y,
     MOVE_P,
     KEY_DOWN,
-    ADD
+    ADD,
+    SUB,
+    MUL,
+    DIV
 }

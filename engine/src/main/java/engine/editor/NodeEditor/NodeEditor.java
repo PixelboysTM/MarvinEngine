@@ -314,7 +314,10 @@ public class NodeEditor {
             "move/Move y Position",
             "move/Move Position",
             "event/Key Pressed",
-            "math/Int Add"
+            "math/Int Add",
+            "math/Int Subtract",
+            "math/Int Multiply",
+            "math/Int Divide",
     };
     transient String folders = "";
     transient ImString searchString = new ImString();

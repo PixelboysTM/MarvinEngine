@@ -260,7 +260,7 @@ public class NodeHolder {
            return new Node(
                    0,0,80, 100,
                    new Vector3f(0.2f,1,0.2f),
-                   "+",
+                   "+ (Add)",
                    new InputHandle[]{
                            new InputHandle(HandleDataType.INT, "in1"),
                    new InputHandle(HandleDataType.INT, "in2")
@@ -269,6 +269,60 @@ public class NodeHolder {
                            new OutputHandle(HandleDataType.INT, "out")
                    },
                    new ActionCommand(Action.ADD, Arrays.asList(
+                           new Variable("_in1", new JsonPrimitive(42), VarType.INT),
+                           new Variable("_in2", new JsonPrimitive(42), VarType.INT)
+                   ))
+           );
+       }
+       if (name.equals("Int Subtract")){
+           return new Node(
+                   0,0,80, 100,
+                   new Vector3f(0.2f,1,0.2f),
+                   "- (Sub)",
+                   new InputHandle[]{
+                           new InputHandle(HandleDataType.INT, "in1"),
+                           new InputHandle(HandleDataType.INT, "in2")
+                   },
+                   new OutputHandle[]{
+                           new OutputHandle(HandleDataType.INT, "out")
+                   },
+                   new ActionCommand(Action.SUB, Arrays.asList(
+                           new Variable("_in1", new JsonPrimitive(42), VarType.INT),
+                           new Variable("_in2", new JsonPrimitive(42), VarType.INT)
+                   ))
+           );
+       }
+       if (name.equals("Int Multiply")){
+           return new Node(
+                   0,0,80, 100,
+                   new Vector3f(0.2f,1,0.2f),
+                   "* (Mul)",
+                   new InputHandle[]{
+                           new InputHandle(HandleDataType.INT, "in1"),
+                           new InputHandle(HandleDataType.INT, "in2")
+                   },
+                   new OutputHandle[]{
+                           new OutputHandle(HandleDataType.INT, "out")
+                   },
+                   new ActionCommand(Action.MUL, Arrays.asList(
+                           new Variable("_in1", new JsonPrimitive(42), VarType.INT),
+                           new Variable("_in2", new JsonPrimitive(42), VarType.INT)
+                   ))
+           );
+       }
+       if (name.equals("Int Divide")){
+           return new Node(
+                   0,0,80, 100,
+                   new Vector3f(0.2f,1,0.2f),
+                   "/ (Div)",
+                   new InputHandle[]{
+                           new InputHandle(HandleDataType.INT, "in1"),
+                           new InputHandle(HandleDataType.INT, "in2")
+                   },
+                   new OutputHandle[]{
+                           new OutputHandle(HandleDataType.INT, "out")
+                   },
+                   new ActionCommand(Action.DIV, Arrays.asList(
                            new Variable("_in1", new JsonPrimitive(42), VarType.INT),
                            new Variable("_in2", new JsonPrimitive(42), VarType.INT)
                    ))
