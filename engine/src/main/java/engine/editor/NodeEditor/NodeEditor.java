@@ -301,23 +301,23 @@ public class NodeEditor {
 
 
     transient String[] inserterItems = new String[]{
-            "Start Node",
-            "Int Variable get",
-            "Useless Folder/Print",
-            "Useless Folder/Int to String",
-            "Int Variable set",
-            "Int constant",
+            "Var/Int/Int Variable get",
+            "Var/Int/Int Variable set",
+            "Var/Int/Int constant",
+            "event/Start Node",
+            "event/Key Pressed",
             "move/Set x Position",
             "move/Set y Position",
             "move/Set Position",
             "move/Move x Position",
             "move/Move y Position",
             "move/Move Position",
-            "event/Key Pressed",
-            "math/Int Add",
-            "math/Int Subtract",
-            "math/Int Multiply",
-            "math/Int Divide",
+            "math/Int/Int Add",
+            "math/Int/Int Subtract",
+            "math/Int/Int Multiply",
+            "math/Int/Int Divide",
+            "Utils/Print",
+            "Utils/Convert/Int to String",
     };
     transient String folders = "";
     transient ImString searchString = new ImString();
@@ -330,6 +330,7 @@ public class NodeEditor {
         ImGui.pushStyleVar(ImGuiStyleVar.WindowPadding, 5, 5);
         ImGui.pushStyleVar(ImGuiStyleVar.WindowTitleAlign, 0.5f, 0.5f);
 
+        ImGui.pushStyleColor(ImGuiCol.WindowBg, 0.1f,0.1f,0.1f,1);
         ImGui.pushStyleColor(ImGuiCol.Border, 1, 1, 1, 1);
 
         ImGui.setNextWindowPos(inserterPos.x - 100, inserterPos.y);
@@ -392,14 +393,20 @@ public class NodeEditor {
 
             if (items.get(i).y) {
                 ImGui.sameLine();
-                ImGui.text(">");
+                ImDrawList list = ImGui.getWindowDrawList();
+                float x = ImGui.getWindowPosX();
+                float y = ImGui.getCursorScreenPosY();
+                list.addText(x + 180, y, ImGui.getColorU32(1,1,1,1), ">");
+                ImGui.newLine();
+//                ImGui.text(">");
             }
+            ImGui.separator();
         }
 
         ImGui.end();
 
         ImGui.popStyleVar(4);
-        ImGui.popStyleColor();
+        ImGui.popStyleColor(2);
     }
 
     public float getRawOffset(float val, float clamp) {

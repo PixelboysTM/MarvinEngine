@@ -154,6 +154,7 @@ public class ProjectPacker {
 
     private static void handleFileData(String name, String toString) {
         if (name.startsWith("scenes/")){
+            Window.get().setSingle(new TestNodeScene());
             Window.getScene().loadSceneFromData(toString);
         }else if(name.startsWith("scripts/")){
             name = name.substring(8);

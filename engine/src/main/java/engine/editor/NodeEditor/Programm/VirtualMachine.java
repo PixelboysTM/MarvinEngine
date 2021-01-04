@@ -174,7 +174,7 @@ public class VirtualMachine {
                     int n = aObj.get("value").getAsInt();
                     int value = getIntegerParam(p, n, aObj.get("identifier").getAsString());
                     GameObject g = programms.get(p).y;
-                    g.transform.position.x = value;
+                    g.transform.position.x += value;
                     System.out.println("<yellow>VM_OUT: Moving" + value);
                 } else {
                     int value = vars.get(0).getAsJsonObject().get("default").getAsInt();
@@ -189,7 +189,7 @@ public class VirtualMachine {
                     int n = aObj.get("value").getAsInt();
                     int value = getIntegerParam(p, n, aObj.get("identifier").getAsString());
                     GameObject g = programms.get(p).y;
-                    g.transform.position.y = value;
+                    g.transform.position.y += value;
                 } else {
                     int value = vars.get(0).getAsJsonObject().get("default").getAsInt();
                     GameObject g = programms.get(p).y;
