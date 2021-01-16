@@ -59,6 +59,7 @@ public class RuntimeScene extends Scene{
 
         elapsed += dt;
         if (elapsed > 0.03f){
+            vm.setCurrentDt(elapsed);
             if  (vm.hasStepsLeft())
                 vm.step();
 

@@ -328,6 +328,19 @@ public class NodeHolder {
                    ))
            );
        }
+       if(name.equals("Tick Node")){
+           return new Node(
+                   0,0,80,100,
+                   new Vector3f(1, 0.2f, 0.2f),
+                   "Tick",
+                   new InputHandle[]{},
+                   new OutputHandle[]{
+                           new OutputHandle(HandleDataType.FLOW, "tick"),
+                           new OutputHandle(HandleDataType.INT, "delta") //TODO: CHange to float
+                   },
+                   new ActionCommand(Action.TICK, null)
+           );
+       }
        assert false : "Unavailable Node";
        return null;
    }

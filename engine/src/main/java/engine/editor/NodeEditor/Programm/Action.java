@@ -17,5 +17,6 @@ public enum Action {
     ADD,
     SUB,
     MUL,
-    DIV
+    DIV,
+    TICK
 }

@@ -1,7 +1,5 @@
 package engine.editor.NodeEditor.Programm;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import engine.ecs.GameObject;
@@ -10,12 +8,14 @@ import engine.util.Tuple;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class VirtualMachine {
-    private List<Tuple<JsonArray, GameObject>> programms; //TODO: Add gameObject reference interface
+
+    private List<Tuple<JsonArray, GameObject>> programms;
     private ListWrapper[] callQueue;
     private RuntimeVarHandler varHandler;
+    private ListWrapper[] tickerNodes;
+    private float lastDeltaTime = -1;
 
     public VirtualMachine(List<Tuple<JsonArray, GameObject>> programms) {
         this.programms = programms;
@@ -33,9 +33,31 @@ public class VirtualMachine {
                 }
             }
         }
+
+
+        //Tick Node
+        tickerNodes = new ListWrapper[programms.size()];
+        for (int i = 0; i < tickerNodes.length; i++) {
+            tickerNodes[i] = new ListWrapper();
+        }
+        for (int i = 0; i < programms.size(); i++) {
+            JsonArray a = programms.get(i).x;
+            for (int j = 0; j < a.size(); j++) {
+                JsonObject o = a.get(j).getAsJsonObject();
+                if (o.get("cmd").getAsString().equals("TICK")) {
+                    tickerNodes[i].list.add(j);
+                }
+            }
+        }
+
+    }
+
+    public void setCurrentDt(float dt){
+        lastDeltaTime = dt;
     }
 
     public void step() {
+
         for (int i = 0; i < callQueue.length; i++) {
             ListWrapper w = new ListWrapper();
             for (int in :
@@ -56,9 +78,35 @@ public class VirtualMachine {
             }
             callQueue[i] = w;
         }
+
+        //Tick Node
+        for (int i = 0; i < tickerNodes.length; i++) {
+            for (int in :
+                    tickerNodes[i].list) {
+                JsonObject obj = getCmdWithId(i, in);
+                String cmd = obj.get("cmd").getAsString();
+                JsonArray data = obj.getAsJsonArray("data");
+                JsonArray vars = obj.getAsJsonArray("vars");
+                performCmd(i, cmd, data, vars);
+                JsonArray next = obj.getAsJsonArray("flows");
+                for (int j = 0; j < next.size(); j++) {
+                    JsonArray ar = next.get(j).getAsJsonObject().get("value").getAsJsonArray();
+                    for (int k = 0; k < ar.size(); k++) {
+                        callQueue[i].list.add(ar.get(k).getAsInt());
+                    }
+                }
+            }
+        }
     }
 
+
+
     public boolean hasStepsLeft() {
+        for (ListWrapper w : tickerNodes){
+            if (w.list.size() > 0)
+                return true;
+        }
+
         for (ListWrapper w : callQueue) {
             if (w.list.size() > 0)
                 return true;
@@ -232,8 +280,11 @@ public class VirtualMachine {
             case "KEY_DOWN":
                 System.out.println("<green>VM_LOG: Key Pressed");
                 break;
-                default:
-                System.out.println("<red>VM_ERROR: Unknown command.");
+            case "TICK":
+                //TODO: Tick Action here
+                break;
+            default:
+                System.out.println("<red>VM_ERROR: Unknown command: " + cmd);
                 break;
         }
     }
@@ -425,6 +476,8 @@ public class VirtualMachine {
 
                     return v1 / v2;
                 }
+            case "TICK":
+                return (int)(lastDeltaTime * 1000); //TODO: CHnage to float when available
         }
         return -1;
     }

@@ -64,6 +64,14 @@ public class TestNodeScene extends Scene {
 
 
     }
+    public TestNodeScene(){
+        super();
+        GameObject g = new GameObject("Marvin", new Transform(new Vector2f(-50,-50), new Vector2f(100,100)), 0);
+        SpriteRenderer spriteRenderer = new SpriteRenderer();
+        spriteRenderer.setTexture(AssetPool.getTexture("icon.png"));
+        g.addComponent(spriteRenderer);
+        gameObjetcs.add(g);
+    }
 
     private void loadResources() {
         float t = Time.getTime();

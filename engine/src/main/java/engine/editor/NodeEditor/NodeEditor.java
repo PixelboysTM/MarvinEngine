@@ -305,6 +305,7 @@ public class NodeEditor {
             "Var/Int/Int Variable set",
             "Var/Int/Int constant",
             "event/Start Node",
+            "event/Tick Node",
             "event/Key Pressed",
             "move/Set x Position",
             "move/Set y Position",
