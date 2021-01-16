@@ -18,7 +18,8 @@ import imgui.type.ImBoolean;
 import org.joml.Vector2f;
 
 import java.io.File;
-import java.util.*;
+import java.util.Hashtable;
+import java.util.Map;
 
 import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
 
@@ -29,6 +30,7 @@ public class TestNodeScene extends Scene {
         NODE_EDITOR,
         NONE
     }
+
     private NodeEditor lastDrawnNodeEditor = null;
 
     private InspectorFocus lastFocus = InspectorFocus.NONE;
@@ -101,7 +103,7 @@ public class TestNodeScene extends Scene {
     @Override
     public void init() {
         this.camera = new Camera(new Vector2f(-Settings.ViewportWidth / 2.0f, -Settings.ViewportHeight / 2.0f));
-         loadResources();
+        loadResources();
     }
 
     @Override
@@ -117,7 +119,7 @@ public class TestNodeScene extends Scene {
         if (ImGui.collapsingHeader("Scene Hierarchy")) {
             for (int i = 0; i < gameObjetcs.size(); i++) {
                 ImGui.pushID("sceneNodeHie" + i);
-                 ImGui.selectable(gameObjetcs.get(i).getName(), gameObjetcs.get(i) == activeGameObject);
+                ImGui.selectable(gameObjetcs.get(i).getName(), gameObjetcs.get(i) == activeGameObject);
                 if (ImGui.isItemClicked(0)) {
                     activeGameObject = gameObjetcs.get(i);
                 }
@@ -210,7 +212,12 @@ public class TestNodeScene extends Scene {
             }
             if (ImGui.beginMenu("Edit")) {
                 if (ImGui.menuItem("Import Resources")) {
-
+                   String id = ResourceManager.loadNewTexture();
+//                   GameObject g = new GameObject("test Res", new Transform(new Vector2f(0,0), new Vector2f(100,100)), -2);
+//                   SpriteRenderer r = new SpriteRenderer();
+//                   r.setTexture(ResourceManager.getTexture(id));
+//                   g.addComponent(r);
+//                   addGameObjectToScene(g);
                 }
                 ImGui.endMenu();
             }
@@ -222,14 +229,23 @@ public class TestNodeScene extends Scene {
                 ImGui.end();
             }
             ImGui.separator();
-            if (ImGui.beginMenu("Run")){
-                if(ImGui.menuItem("Run Scene")){
+            if (ImGui.beginMenu("Run")) {
+                if (ImGui.menuItem("Run Scene")) {
                     Window.get().pushScene(new RuntimeScene(gameObjetcs, editorDictionary.values()));
                 }
                 ImGui.endMenu();
             }
             ImGui.endMainMenuBar();
         }
+        ImGui.begin("debug_res");
+
+        for (String s: ResourceManager.textureIds()
+             ) {
+            ImGui.text(s);
+        }
+
+        ImGui.end();
+
 
     }
 
@@ -257,8 +273,8 @@ public class TestNodeScene extends Scene {
                 .registerTypeAdapter(HandleDataType.class, new HandleDataTypeSerializer())
                 .create();
 
-       GameObject obj = findObjwithID(id);
-       if (obj == null)return;
+        GameObject obj = findObjwithID(id);
+        if (obj == null) return;
 
         if (!editorDictionary.containsKey(obj)) {
             editorDictionary.put(obj, new NodeEditor(obj));
@@ -267,12 +283,11 @@ public class TestNodeScene extends Scene {
     }
 
 
-
     @Override
     public void UpdateEditors() {
         for (NodeEditor edits :
                 editorDictionary.values()) {
-            edits.setName(findObjwithID( edits.getObjID()));
+            edits.setName(findObjwithID(edits.getObjID()));
         }
     }
 }

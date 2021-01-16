@@ -2,6 +2,7 @@ package scenes;
 
 import engine.Prefabs;
 import engine.renderer.DebugDraw;
+import engine.util.ResourceManager;
 import org.joml.Vector3f;
 import engine.ecs.Transform;
 import engine.Window;
@@ -14,10 +15,13 @@ import imgui.ImGui;
 import imgui.ImVec2;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
+import org.lwjgl.BufferUtils;
 
 import java.io.File;
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 
-import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
+import static org.lwjgl.stb.STBImage.stbi_load;
 
 public class LevelEditorScene extends Scene {
 
@@ -37,6 +41,7 @@ public class LevelEditorScene extends Scene {
         Window.get().a = 0;
         this.camera = new Camera(new Vector2f(0, 0));
         loadResources();
+
         sprites = AssetPool.getSpritesheet("assets/images/decorationsAndBlocks.png");
         if (loadedLevel){
             if (gameObjetcs.size() > 0)
@@ -55,7 +60,6 @@ public class LevelEditorScene extends Scene {
         GameObject obj2 = new GameObject("OBJ2", new Transform(new Vector2f(400, 100), new Vector2f(256, 256)),3);
         SpriteRenderer obj2SpriteRenderer = new SpriteRenderer();
         Sprite obj2Sprite = new Sprite();
-        obj2Sprite.setTexture(AssetPool.getTexture("testImage.png"));
         obj2SpriteRenderer.setSprite(obj2Sprite);
         obj2.addComponent(obj2SpriteRenderer);
 

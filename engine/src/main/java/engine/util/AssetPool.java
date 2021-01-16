@@ -58,4 +58,8 @@ public class AssetPool {
         }
         return AssetPool.spritesheets.getOrDefault(file.getAbsolutePath(), null);
     }
+
+    public static String[] getAssetsTextures(){
+        return textures.keySet().toArray(new String[1]);
+    }
 }

@@ -7,8 +7,8 @@ import engine.editor.NodeEditor.Programm.VarType;
 import engine.editor.NodeEditor.Programm.Variable;
 import org.joml.Vector3f;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 public class NodeHolder {
 
@@ -26,7 +26,7 @@ public class NodeHolder {
                            new OutputHandle(HandleDataType.FLOW, "Run"),
                            new OutputHandle(HandleDataType.STRING, "args"),
                    },
-                   new ActionCommand(Action.START, Arrays.asList(new Variable("_",new JsonPrimitive("Hello World!"), VarType.STRING)))
+                   new ActionCommand(Action.START, Collections.singletonList(new Variable("_", new JsonPrimitive("Hello World!"), VarType.STRING)))
 
             );
        }
@@ -42,7 +42,7 @@ public class NodeHolder {
                    new OutputHandle[]{
                            new OutputHandle(HandleDataType.INT, "value"),
                    },
-                   new ActionCommand(Action.GET_VAR, Arrays.asList(new Variable("test_int",new JsonPrimitive(42), VarType.INT)))
+                   new ActionCommand(Action.GET_VAR, Collections.singletonList(new Variable("test_int", new JsonPrimitive(42), VarType.INT)))
 
            );
        }
@@ -62,7 +62,7 @@ public class NodeHolder {
                            new OutputHandle(HandleDataType.FLOW, "con"),
                            new OutputHandle(HandleDataType.INT, "out"),
                    },
-                   new ActionCommand(Action.SET_VAR, Arrays.asList(new Variable("test_int",new JsonPrimitive(128), VarType.INT)))
+                   new ActionCommand(Action.SET_VAR, Collections.singletonList(new Variable("test_int", new JsonPrimitive(128), VarType.INT)))
 
            );
        }
@@ -81,7 +81,7 @@ public class NodeHolder {
                    new OutputHandle[]{
                            new OutputHandle(HandleDataType.FLOW, "Out"),
                    },
-                   new ActionCommand(Action.PRINT, Arrays.asList(new Variable("_",new JsonPrimitive("Hello World!"), VarType.STRING)))
+                   new ActionCommand(Action.PRINT, Collections.singletonList(new Variable("_", new JsonPrimitive("Hello World!"), VarType.STRING)))
 
            );
        }
@@ -115,7 +115,7 @@ public class NodeHolder {
                    new OutputHandle[]{
                            new OutputHandle(HandleDataType.INT, "value"),
                    },
-                   new ActionCommand(Action.GET_CONSTANT, Arrays.asList(new Variable("_",new JsonPrimitive(12), VarType.INT)))
+                   new ActionCommand(Action.GET_CONSTANT, Collections.singletonList(new Variable("_", new JsonPrimitive(12), VarType.INT)))
 
            );
        }
@@ -134,7 +134,7 @@ public class NodeHolder {
                    new OutputHandle[]{
                            new OutputHandle(HandleDataType.FLOW, "out")
                    },
-                   new ActionCommand(Action.SET_X, Arrays.asList(new Variable("_",new JsonPrimitive(10), VarType.INT)))//TODO: CHange to float
+                   new ActionCommand(Action.SET_X, Collections.singletonList(new Variable("_", new JsonPrimitive(10), VarType.INT)))//TODO: Change to float
 
            );
        }
@@ -153,7 +153,7 @@ public class NodeHolder {
                    new OutputHandle[]{
                            new OutputHandle(HandleDataType.FLOW, "out")
                    },
-                   new ActionCommand(Action.SET_Y, Arrays.asList(new Variable("_",new JsonPrimitive(10), VarType.INT)))//TODO: CHange to float
+                   new ActionCommand(Action.SET_Y, Collections.singletonList(new Variable("_", new JsonPrimitive(10), VarType.INT)))//TODO: Change to float
 
            );
        }
@@ -174,7 +174,7 @@ public class NodeHolder {
                            new OutputHandle(HandleDataType.FLOW, "out")
                    },
                    new ActionCommand(Action.SET_P, Arrays.asList(
-                           new Variable("_input1",new JsonPrimitive(10), VarType.INT), //TODO: CHange to float
+                           new Variable("_input1",new JsonPrimitive(10), VarType.INT), //TODO: Change to float
                            new Variable("_input2",new JsonPrimitive(10), VarType.INT)))
 
            );
@@ -194,7 +194,7 @@ public class NodeHolder {
                    new OutputHandle[]{
                            new OutputHandle(HandleDataType.FLOW, "out")
                    },
-                   new ActionCommand(Action.MOVE_X, Arrays.asList(new Variable("_",new JsonPrimitive(10), VarType.INT)))//TODO: CHange to float
+                   new ActionCommand(Action.MOVE_X, Collections.singletonList(new Variable("_", new JsonPrimitive(10), VarType.INT)))//TODO: Change to float
 
            );
        }
@@ -213,7 +213,7 @@ public class NodeHolder {
                    new OutputHandle[]{
                            new OutputHandle(HandleDataType.FLOW, "out")
                    },
-                   new ActionCommand(Action.MOVE_Y, Arrays.asList(new Variable("_",new JsonPrimitive(10), VarType.INT)))//TODO: CHange to float
+                   new ActionCommand(Action.MOVE_Y, Collections.singletonList(new Variable("_", new JsonPrimitive(10), VarType.INT)))//TODO: Change to float
 
            );
        }
@@ -234,7 +234,7 @@ public class NodeHolder {
                            new OutputHandle(HandleDataType.FLOW, "out")
                    },
                    new ActionCommand(Action.MOVE_P, Arrays.asList(
-                           new Variable("_input1",new JsonPrimitive(10), VarType.INT), //TODO: CHange to float
+                           new Variable("_input1",new JsonPrimitive(10), VarType.INT), //TODO: Change to float
                            new Variable("_input2",new JsonPrimitive(10), VarType.INT)))
 
            );
@@ -252,7 +252,7 @@ public class NodeHolder {
                            new OutputHandle(HandleDataType.FLOW, "action")
                    },
                    new ActionCommand(Action.KEY_DOWN,
-                           Arrays.asList(new Variable("_KeyCode", new JsonPrimitive("Space"), VarType.KEY)))
+                           Collections.singletonList(new Variable("_KeyCode", new JsonPrimitive("Space"), VarType.KEY)))
 
            );
        }

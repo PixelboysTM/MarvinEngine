@@ -4,6 +4,7 @@ import org.lwjgl.BufferUtils;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
+import java.util.Collections;
 import java.util.Objects;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -13,7 +14,9 @@ public class Texture {
 
     private String filepath;
     private transient int texID;
-    private int width, height;
+    private int width, height, channels;
+
+    private byte[] byteBuffer;
 
     public Texture() {
         texID = -1;
@@ -76,6 +79,45 @@ public class Texture {
 
     }
 
+    public void init(ByteBuffer data,int w, int h, int c, String id) {
+        this.filepath = "custom_" + id;
+        ByteBuffer b2 = data.duplicate();
+        byteBuffer = new byte[b2.remaining()];
+        b2.get(byteBuffer);
+
+
+        //Gen texture
+        texID = glGenTextures();
+        glBindTexture(GL_TEXTURE_2D, texID);
+
+        //Set tex parameters
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        if (data != null) {
+            this.width = w;
+            this.height = h;
+            this.channels = c;
+
+            if (c == 3)
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+            else if (c == 4) {
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+                int i = glGetError();
+            } else
+                assert false : "ERROR: Unknown number of channles " + c;
+        } else {
+            assert false : "ERROR: Could not load image '" + filepath + "'";
+        }
+
+        stbi_image_free(data);
+        //glBindTexture(GL_TEXTURE_2D,0);
+
+    }
+
     public void bind() {
         glBindTexture(GL_TEXTURE_2D, texID);
     }
@@ -109,5 +151,13 @@ public class Texture {
                 texture.getHeight() == this.height &&
                 texture.getId() == this.texID &&
                 texture.getFilepath().equals(this.filepath);
+    }
+
+    public byte[] getByteBuffer() {
+        return byteBuffer;
+    }
+
+    public int getChannels() {
+        return channels;
     }
 }

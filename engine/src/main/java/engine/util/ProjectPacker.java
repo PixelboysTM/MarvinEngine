@@ -1,19 +1,22 @@
 package engine.util;
+import com.google.gson.*;
 import engine.Window;
 import engine.editor.NodeEditor.NodeEditor;
+import engine.renderer.Texture;
 import org.lwjgl.PointerBuffer;
 import scenes.TestNodeScene;
+import sun.nio.ch.DirectBuffer;
 
-import javax.swing.*;
 import java.io.*;
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Enumeration;
-import java.util.List;
+import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
+
+import static org.lwjgl.stb.STBImage.stbi_load;
+import static org.lwjgl.stb.STBImage.stbi_load_from_memory;
 import static org.lwjgl.system.MemoryUtil.memAllocPointer;
 import static org.lwjgl.system.MemoryUtil.memFree;
 import static org.lwjgl.util.nfd.NativeFileDialog.*;
@@ -80,6 +83,24 @@ public class ProjectPacker {
                 out.closeEntry();
             }
 
+            for (String id : ResourceManager.textureIds()){
+                out.putNextEntry(new ZipEntry("assets/images/" + id + ".img"));
+                Texture tex = ResourceManager.getTexture(id);
+                //TODO: Continue here
+                byte[] bs = tex.getByteBuffer();
+                out.write(bs);
+                out.closeEntry();
+                out.putNextEntry(new ZipEntry("assets/images/" + id + ".id"));
+                JsonObject obj = new JsonObject();
+                obj.add("width", new JsonPrimitive(tex.getWidth()));
+                obj.add("height", new JsonPrimitive(tex.getHeight()));
+                obj.add("channels", new JsonPrimitive(tex.getChannels()));
+                Gson g = new GsonBuilder().setPrettyPrinting().create();
+                String t = g.toJson(obj);
+                out.write(t.getBytes(StandardCharsets.UTF_8));
+                out.closeEntry();
+            }
+
             out.close();
         } catch (IOException e) {
             System.out.println("ff");
@@ -112,12 +133,27 @@ public class ProjectPacker {
             Enumeration<? extends ZipEntry> entries = file.entries();
 
             List<Tuple<String, String>> data = new ArrayList<>();
+            Map<String, List<Byte>> imData = new HashMap<>();
             while(entries.hasMoreElements()){
                 ZipEntry entry = entries.nextElement();
                 if(entry.isDirectory()){
                     System.out.println("dir  : " + entry.getName());
                 } else {
                     System.out.println("file : " + entry.getName());
+                    if (entry.getName().endsWith(".img")){
+                        byte[] b = new byte[1024];
+                        List<Byte> buf = new ArrayList<>();
+                        InputStream reader = file.getInputStream(entry);
+                        int length;
+                        while ((length = reader.read(b, 0, b.length)) != -1){
+                            for (int i = 0; i < b.length; i++) {
+                                buf.add(b[i]);
+                            }
+                        }
+                        imData.put(entry.getName(), buf);
+                        continue;
+                    }
+
                     char[] buf = new char[1024];
                     InputStreamReader reader = new InputStreamReader(file.getInputStream(entry));
                     StringBuilder sb = new StringBuilder();
@@ -126,19 +162,22 @@ public class ProjectPacker {
                         sb.append(buf, 0, length);
                     }
 
-                    System.out.println(sb.toString());
+                    //System.out.println(sb.toString());
                     data.add(new Tuple<>( entry.getName(), sb.toString()));
                 }
             }
             file.close();
             List<Tuple<String, String>> scenes = new ArrayList<>();
             List<Tuple<String, String>> scripts = new ArrayList<>();
+            List<Tuple<String, String>> images = new ArrayList<>();
             for (Tuple<String, String> t :
                     data) {
                 if (t.x.startsWith("scenes/"))
                     scenes.add(t);
                 else if(t.x.startsWith("scripts/"))
                     scripts.add(t);
+                else if (t.x.startsWith("assets/images/"))
+                    images.add(t);
             }
             for (int i = 0; i < scenes.size(); i++) {
                 handleFileData(scenes.get(i).x, scenes.get(i).y);
@@ -146,21 +185,44 @@ public class ProjectPacker {
             for (int i = 0; i < scripts.size(); i++) {
                 handleFileData(scripts.get(i).x, scripts.get(i).y);
             }
+            for (int i = 0; i < images.size(); i++){
+                String dataName = images.get(i).x.replace(".id", ".img");
+                List<Byte> dataBytes = imData.get(dataName);;
+                handleImageData(images.get(i).x, images.get(i).y, dataBytes);
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    private static void handleImageData(String name, String spec, List<Byte> data){
+        name = name.substring(14);
+        name = name.replace(".id", "");
+        Gson g = new GsonBuilder().create();
+        JsonObject obj = g.fromJson(spec, JsonObject.class);
+        int[] w = new int[] { obj.get("width").getAsInt()};
+        int[] h = new int[] { obj.get("height").getAsInt()};
+        int[] c = new int[] { obj.get("channels").getAsInt()};
+        byte[] bufData = new byte[data.size()];
+        for (int i = 0; i < data.size(); i++) {
+            bufData[i] = data.get(i);
+        }
+        ByteBuffer buf;
+        buf = ByteBuffer.wrap(bufData);
+        ResourceManager.addTextureFromData(name, buf, w[0],h[0],c[0]);
+    }
+
     private static void handleFileData(String name, String toString) {
         if (name.startsWith("scenes/")){
             Window.get().setSingle(new TestNodeScene());
             Window.getScene().loadSceneFromData(toString);
-        }else if(name.startsWith("scripts/")){
+        }else if(name.startsWith("scripts/")) {
             name = name.substring(8);
             name = name.replace(".edit", "");
             int id = Integer.parseInt(name);
-            ((TestNodeScene)Window.getScene()).setEditorfromData(id, toString);
+            ((TestNodeScene) Window.getScene()).setEditorfromData(id, toString);
+
         }
         //TODO: Make data (Image data)
     }
