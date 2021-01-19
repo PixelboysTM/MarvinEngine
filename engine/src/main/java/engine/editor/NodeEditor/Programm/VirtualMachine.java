@@ -161,11 +161,11 @@ public class VirtualMachine {
                 if (data.size() > 0) {
                     JsonObject aObj = data.get(0).getAsJsonObject();
                     int n = aObj.get("value").getAsInt();
-                    int value = getIntegerParam(p, n, aObj.get("identifier").getAsString());
+                    float value = getFloatParam(p, n, aObj.get("identifier").getAsString());
                     GameObject g = programms.get(p).y;
                     g.transform.position.x = value;
                 } else {
-                    int value = vars.get(0).getAsJsonObject().get("default").getAsInt();
+                    float value = vars.get(0).getAsJsonObject().get("default").getAsFloat();
                     GameObject g = programms.get(p).y;
                     g.transform.position.x = value;
                 }
@@ -174,11 +174,11 @@ public class VirtualMachine {
                 if (data.size() > 0) {
                     JsonObject aObj = data.get(0).getAsJsonObject();
                     int n = aObj.get("value").getAsInt();
-                    int value = getIntegerParam(p, n, aObj.get("identifier").getAsString());
+                    float value = getFloatParam(p, n, aObj.get("identifier").getAsString());
                     GameObject g = programms.get(p).y;
                     g.transform.position.y = value;
                 } else {
-                    int value = vars.get(0).getAsJsonObject().get("default").getAsInt();
+                    float value = vars.get(0).getAsJsonObject().get("default").getAsFloat();
                     GameObject g = programms.get(p).y;
                     g.transform.position.y = value;
                 }
@@ -187,30 +187,30 @@ public class VirtualMachine {
                 if (data.size() > 1) {
                     JsonObject aObj_x = data.get(0).getAsJsonObject();
                     int n_x = aObj_x.get("value").getAsInt();
-                    int value_x = getIntegerParam(p, n_x, aObj_x.get("identifier").getAsString());
+                    float value_x = getFloatParam(p, n_x, aObj_x.get("identifier").getAsString());
                     JsonObject aObj_y = data.get(1).getAsJsonObject();
                     int n_y = aObj_y.get("value").getAsInt();
-                    int value_y = getIntegerParam(p, n_y, aObj_y.get("identifier").getAsString());
+                    float value_y = getFloatParam(p, n_y, aObj_y.get("identifier").getAsString());
                     GameObject g = programms.get(p).y;
                     g.transform.position.set(value_x, value_y);
                 } else if (data.size() > 0){
                     JsonObject aObj = data.get(0).getAsJsonObject();
                     int n = aObj.get("value").getAsInt();
-                    int value = getIntegerParam(p, n, aObj.get("identifier").getAsString());;
+                    float value = getFloatParam(p, n, aObj.get("identifier").getAsString());;
                     String key = aObj.get("key").getAsString();
                     GameObject g = programms.get(p).y;
                     if (key.toUpperCase().startsWith("Y")){
-                        int vx = vars.get(0).getAsJsonObject().get("default").getAsInt();
+                        float vx = vars.get(0).getAsJsonObject().get("default").getAsFloat();
                         g.transform.position.set(vx, value);
                     }else if (key.toUpperCase().startsWith("X")){
-                        int vy = vars.get(1).getAsJsonObject().get("default").getAsInt();
+                        float vy = vars.get(1).getAsJsonObject().get("default").getAsFloat();
                         g.transform.position.set(value, vy);
                     }else {
                         System.out.println("<red>VM_ERROR: Error cant resolve pluck situation!");
                     }
                 }else {
-                    int value_x = vars.get(0).getAsJsonObject().get("default").getAsInt();
-                    int value_y = vars.get(1).getAsJsonObject().get("default").getAsInt();
+                    float value_x = vars.get(0).getAsJsonObject().get("default").getAsFloat();
+                    float value_y = vars.get(1).getAsJsonObject().get("default").getAsFloat();
                     GameObject g = programms.get(p).y;
                     g.transform.position.set(value_x, value_y);
 
@@ -220,12 +220,12 @@ public class VirtualMachine {
                 if (data.size() > 0) {
                     JsonObject aObj = data.get(0).getAsJsonObject();
                     int n = aObj.get("value").getAsInt();
-                    int value = getIntegerParam(p, n, aObj.get("identifier").getAsString());
+                    float value = getFloatParam(p, n, aObj.get("identifier").getAsString());
                     GameObject g = programms.get(p).y;
                     g.transform.position.x += value;
                     System.out.println("<yellow>VM_OUT: Moving" + value);
                 } else {
-                    int value = vars.get(0).getAsJsonObject().get("default").getAsInt();
+                    float value = vars.get(0).getAsJsonObject().get("default").getAsFloat();
                     GameObject g = programms.get(p).y;
                     g.transform.position.x += value;
                     System.out.println("<yellow>VM_OUT: Moving" + value);
@@ -235,11 +235,11 @@ public class VirtualMachine {
                 if (data.size() > 0) {
                     JsonObject aObj = data.get(0).getAsJsonObject();
                     int n = aObj.get("value").getAsInt();
-                    int value = getIntegerParam(p, n, aObj.get("identifier").getAsString());
+                    float value = getFloatParam(p, n, aObj.get("identifier").getAsString());
                     GameObject g = programms.get(p).y;
                     g.transform.position.y += value;
                 } else {
-                    int value = vars.get(0).getAsJsonObject().get("default").getAsInt();
+                    float value = vars.get(0).getAsJsonObject().get("default").getAsFloat();
                     GameObject g = programms.get(p).y;
                     g.transform.position.y += value;
                 }
@@ -248,30 +248,30 @@ public class VirtualMachine {
                 if (data.size() > 1) {
                     JsonObject aObj_x = data.get(0).getAsJsonObject();
                     int n_x = aObj_x.get("value").getAsInt();
-                    int value_x = getIntegerParam(p, n_x, aObj_x.get("identifier").getAsString());
+                    float value_x = getFloatParam(p, n_x, aObj_x.get("identifier").getAsString());
                     JsonObject aObj_y = data.get(1).getAsJsonObject();
                     int n_y = aObj_y.get("value").getAsInt();
-                    int value_y = getIntegerParam(p, n_y, aObj_y.get("identifier").getAsString());
+                    float value_y = getFloatParam(p, n_y, aObj_y.get("identifier").getAsString());
                     GameObject g = programms.get(p).y;
                     g.transform.position.add(value_x, value_y);
                 } else if (data.size() > 0){
                     JsonObject aObj = data.get(0).getAsJsonObject();
                     int n = aObj.get("value").getAsInt();
-                    int value = getIntegerParam(p, n, aObj.get("identifier").getAsString());;
+                    float value = getFloatParam(p, n, aObj.get("identifier").getAsString());;
                     String key = aObj.get("key").getAsString();
                     GameObject g = programms.get(p).y;
                     if (key.toUpperCase().startsWith("Y")){
-                        int vx = vars.get(0).getAsJsonObject().get("default").getAsInt();
+                        float vx = vars.get(0).getAsJsonObject().get("default").getAsFloat();
                         g.transform.position.add(vx, value);
                     }else if (key.toUpperCase().startsWith("X")){
-                        int vy = vars.get(1).getAsJsonObject().get("default").getAsInt();
+                        float vy = vars.get(1).getAsJsonObject().get("default").getAsFloat();
                         g.transform.position.add(value, vy);
                     }else {
                         System.out.println("<red>VM_ERROR: Error cant resolve pluck situation!");
                     }
                 }else {
-                    int value_x = vars.get(0).getAsJsonObject().get("default").getAsInt();
-                    int value_y = vars.get(1).getAsJsonObject().get("default").getAsInt();
+                    float value_x = vars.get(0).getAsJsonObject().get("default").getAsFloat();
+                    float value_y = vars.get(1).getAsJsonObject().get("default").getAsFloat();
                     GameObject g = programms.get(p).y;
                     g.transform.position.add(value_x, value_y);
 
@@ -294,10 +294,14 @@ public class VirtualMachine {
         switch (obj.get("cmd").getAsString()) {
             case "START":
                 return obj.get("vars").getAsJsonArray().get(0).getAsJsonObject().get("default").getAsString();
-            case "CONVERT":
+            case "CONVERT_IS": //TODO: Split into int and Float
                 int no = obj.get("data").getAsJsonArray().get(0).getAsJsonObject().get("value").getAsInt();
                 int i = getIntegerParam(p, no, obj.get("data").getAsJsonArray().get(0).getAsJsonObject().get("identifier").getAsString());
                 return String.valueOf(i);
+            case "CONVERT_FS": //TODO: Split into int and Float
+                int nos = obj.get("data").getAsJsonArray().get(0).getAsJsonObject().get("value").getAsInt();
+                float f = getFloatParam(p, nos, obj.get("data").getAsJsonArray().get(0).getAsJsonObject().get("identifier").getAsString());
+                return String.valueOf(f);
         }
         return "Not finished cmd: " + obj.get("cmd").getAsString();
     }
@@ -476,8 +480,164 @@ public class VirtualMachine {
 
                     return v1 / v2;
                 }
+//            case "TICK":
+//                return (int)(lastDeltaTime * 1000); //TODO: CHnage to float when available
+        }
+        return -1;
+    }
+
+
+
+    private float getFloatParam(int p, int n, String identifier) {
+        JsonObject obj = getCmdWithId(p, n);
+        switch (obj.get("cmd").getAsString()) {
+            case "SET_VAR":
+            case "GET_VAR":
+                JsonObject var = obj.get("vars").getAsJsonArray().get(0).getAsJsonObject();
+                String si = var.get("default").getAsString();
+
+                float f = varHandler.getValueOrDefault(var.get("name").getAsString(), Float.parseFloat(si), VarType.valueOf(var.get("type").getAsString()));
+                return f;
+            case "GET_CONSTANT":
+                var = obj.get("vars").getAsJsonArray().get(0).getAsJsonObject();
+                si = var.get("default").getAsString();
+                return Float.parseFloat(si);
+
+            //MAth TODO: Make same as for int
+            case "ADD":
+                JsonArray conns = obj.get("data").getAsJsonArray();
+                if (conns.size() == 0){
+                    String var1s = obj.get("vars").getAsJsonArray().get(0).getAsJsonObject().get("default").getAsString();
+                    float var1 = Float.parseFloat(var1s);
+
+                    String var2s = obj.get("vars").getAsJsonArray().get(1).getAsJsonObject().get("default").getAsString();
+                    float var2 = Float.parseFloat(var2s);
+
+                    return var1 + var2;
+                } else if( conns.size() == 1){
+                    JsonObject handle = obj.get("data").getAsJsonArray().get(0).getAsJsonObject();
+                    String hName = handle.get("key").getAsString();
+                    float Ivar = Float.MIN_VALUE;
+                    if (hName.endsWith("1")){
+                        String vars = obj.get("vars").getAsJsonArray().get(1).getAsJsonObject().get("default").getAsString();
+                        Ivar = Float.parseFloat(vars);
+                    }else {
+                        String vars = obj.get("vars").getAsJsonArray().get(0).getAsJsonObject().get("default").getAsString();
+                        Ivar = Float.parseFloat(vars);
+                    }
+                    float value2 = getFloatParam(p, handle.get("value").getAsInt(), handle.get("identifier").getAsString());
+                    return Ivar + value2;
+                }else{
+                    JsonObject handle1 = obj.get("data").getAsJsonArray().get(0).getAsJsonObject();
+                    float v1 = getFloatParam(p, handle1.get("value").getAsInt(), handle1.get("identifier").getAsString());
+
+                    JsonObject handle2 = obj.get("data").getAsJsonArray().get(1).getAsJsonObject();
+                    float v2 = getFloatParam(p, handle2.get("value").getAsInt(), handle1.get("identifier").getAsString());
+
+                    return v1 + v2;
+                }
+            case "SUB":
+                JsonArray conn = obj.get("data").getAsJsonArray();
+                if (conn.size() == 0){
+                    String var1s = obj.get("vars").getAsJsonArray().get(0).getAsJsonObject().get("default").getAsString();
+                    float var1 = Float.parseFloat(var1s);
+
+                    String var2s = obj.get("vars").getAsJsonArray().get(1).getAsJsonObject().get("default").getAsString();
+                    float var2 = Float.parseFloat(var2s);
+
+                    return var1 - var2;
+                } else if( conn.size() == 1){
+                    JsonObject handle = obj.get("data").getAsJsonArray().get(0).getAsJsonObject();
+                    String hName = handle.get("key").getAsString();
+                    float Ivar = Float.MIN_VALUE;
+                    float value2 = getFloatParam(p, handle.get("value").getAsInt(), handle.get("identifier").getAsString());
+                    if (hName.endsWith("1")){
+                        String vars = obj.get("vars").getAsJsonArray().get(1).getAsJsonObject().get("default").getAsString();
+                        Ivar = Float.parseFloat(vars);
+                        return value2 - Ivar;
+                    }else {
+                        String vars = obj.get("vars").getAsJsonArray().get(0).getAsJsonObject().get("default").getAsString();
+                        Ivar = Float.parseFloat(vars);
+                        return Ivar - value2;
+                    }
+                }else{
+                    JsonObject handle1 = obj.get("data").getAsJsonArray().get(0).getAsJsonObject();
+                    float v1 = getFloatParam(p, handle1.get("value").getAsInt(), handle1.get("identifier").getAsString());
+
+                    JsonObject handle2 = obj.get("data").getAsJsonArray().get(1).getAsJsonObject();
+                    float v2 = getFloatParam(p, handle2.get("value").getAsInt(), handle1.get("identifier").getAsString());
+
+                    return v1 - v2;
+                }
+            case "MUL":
+                JsonArray conns2 = obj.get("data").getAsJsonArray();
+                if (conns2.size() == 0){
+                    String var1s = obj.get("vars").getAsJsonArray().get(0).getAsJsonObject().get("default").getAsString();
+                    float var1 = Float.parseFloat(var1s);
+
+                    String var2s = obj.get("vars").getAsJsonArray().get(1).getAsJsonObject().get("default").getAsString();
+                    float var2 = Float.parseFloat(var2s);
+
+                    return var1 * var2;
+                } else if( conns2.size() == 1){
+                    JsonObject handle = obj.get("data").getAsJsonArray().get(0).getAsJsonObject();
+                    String hName = handle.get("key").getAsString();
+                    float Ivar = Float.MIN_VALUE;
+                    if (hName.endsWith("1")){
+                        String vars = obj.get("vars").getAsJsonArray().get(1).getAsJsonObject().get("default").getAsString();
+                        Ivar = Float.parseFloat(vars);
+
+                    }else {
+                        String vars = obj.get("vars").getAsJsonArray().get(0).getAsJsonObject().get("default").getAsString();
+                        Ivar = Float.parseFloat(vars);
+
+                    }
+                    float value2 = getFloatParam(p, handle.get("value").getAsInt(), handle.get("identifier").getAsString());
+                    return Ivar * value2;
+                }else{
+                    JsonObject handle1 = obj.get("data").getAsJsonArray().get(0).getAsJsonObject();
+                    float v1 = getFloatParam(p, handle1.get("value").getAsInt(), handle1.get("identifier").getAsString());
+
+                    JsonObject handle2 = obj.get("data").getAsJsonArray().get(1).getAsJsonObject();
+                    float v2 = getFloatParam(p, handle2.get("value").getAsInt(), handle1.get("identifier").getAsString());
+
+                    return v1 * v2;
+                }
+            case "DIV":
+                JsonArray conn3 = obj.get("data").getAsJsonArray();
+                if (conn3.size() == 0){
+                    String var1s = obj.get("vars").getAsJsonArray().get(0).getAsJsonObject().get("default").getAsString();
+                    float var1 = Float.parseFloat(var1s);
+
+                    String var2s = obj.get("vars").getAsJsonArray().get(1).getAsJsonObject().get("default").getAsString();
+                    float var2 = Float.parseFloat(var2s);
+
+                    return var1 / var2;
+                } else if( conn3.size() == 1){
+                    JsonObject handle = obj.get("data").getAsJsonArray().get(0).getAsJsonObject();
+                    String hName = handle.get("key").getAsString();
+                    float Ivar = Float.MIN_VALUE;
+                    float value2 = getFloatParam(p, handle.get("value").getAsInt(), handle.get("identifier").getAsString());
+                    if (hName.endsWith("1")){
+                        String vars = obj.get("vars").getAsJsonArray().get(1).getAsJsonObject().get("default").getAsString();
+                        Ivar = Float.parseFloat(vars);
+                        return value2 / Ivar;
+                    }else {
+                        String vars = obj.get("vars").getAsJsonArray().get(0).getAsJsonObject().get("default").getAsString();
+                        Ivar = Float.parseFloat(vars);
+                        return Ivar / value2;
+                    }
+                }else{
+                    JsonObject handle1 = obj.get("data").getAsJsonArray().get(0).getAsJsonObject();
+                    float v1 = getFloatParam(p, handle1.get("value").getAsInt(), handle1.get("identifier").getAsString());
+
+                    JsonObject handle2 = obj.get("data").getAsJsonArray().get(1).getAsJsonObject();
+                    float v2 = getFloatParam(p, handle2.get("value").getAsInt(), handle1.get("identifier").getAsString());
+
+                    return v1 / v2;
+                }
             case "TICK":
-                return (int)(lastDeltaTime * 1000); //TODO: CHnage to float when available
+                return lastDeltaTime;
         }
         return -1;
     }
@@ -512,6 +672,9 @@ public class VirtualMachine {
             }
         }
     }
+
+
+
 
     class ListWrapper {
         public List<Integer> list;

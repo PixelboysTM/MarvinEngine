@@ -303,7 +303,10 @@ public class NodeEditor {
     transient String[] inserterItems = new String[]{
             "Var/Int/Int Variable get",
             "Var/Int/Int Variable set",
-            "Var/Int/Int constant",
+            "Var/Int/Int Constant",
+            "Var/Float/Float Variable get",
+            "Var/Float/Float Variable set",
+            "Var/Float/Float Constant",
             "event/Start Node",
             "event/Tick Node",
             "event/Key Pressed",
@@ -317,8 +320,13 @@ public class NodeEditor {
             "math/Int/Int Subtract",
             "math/Int/Int Multiply",
             "math/Int/Int Divide",
+            "math/Float/Float Add",
+            "math/Float/Float Subtract",
+            "math/Float/Float Multiply",
+            "math/Float/Float Divide",
             "Utils/Print",
             "Utils/Convert/Int to String",
+            "Utils/Convert/Float to String",
     };
     transient String folders = "";
     transient ImString searchString = new ImString();

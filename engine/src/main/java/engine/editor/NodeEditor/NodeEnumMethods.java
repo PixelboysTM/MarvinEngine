@@ -15,6 +15,8 @@ public class NodeEnumMethods {
                 return new Vector3f(1);
             case STRING:
                 return new Vector3f(198/255.0f, 3/255.0f, 252/255.0f);
+            case FLOAT:
+                return new Vector3f(224/255.0f, 113/255.0f, 16/255.0f);
             default:
                 return new Vector3f(28/255.0f, 22/255.0f, 58/255.0f);
         }

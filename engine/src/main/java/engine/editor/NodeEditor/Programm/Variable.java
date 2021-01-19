@@ -4,6 +4,7 @@ import com.google.gson.JsonPrimitive;
 import engine.input.KeyCodes;
 import imgui.ImGui;
 import imgui.type.ImBoolean;
+import imgui.type.ImFloat;
 import imgui.type.ImInt;
 import imgui.type.ImString;
 
@@ -101,6 +102,14 @@ public class Variable {
                ImGui.pushID(ImGui.getID(name));
                if (ImGui.combo("Key to Listen to", selected, keyCodes, keyCodes.length)){
                    defaultValue = new JsonPrimitive(keyCodes[selected.get()]);
+               }
+               ImGui.popID();
+               break;
+           case FLOAT:
+               ImFloat f = new ImFloat(defaultValue.getAsFloat());
+               ImGui.pushID(ImGui.getID(name));
+               if (ImGui.inputFloat("Default", f)){
+                   defaultValue = new JsonPrimitive(f.get());
                }
                ImGui.popID();
                break;

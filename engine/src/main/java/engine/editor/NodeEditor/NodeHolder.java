@@ -99,11 +99,11 @@ public class NodeHolder {
                    new OutputHandle[]{
                            new OutputHandle(HandleDataType.STRING, "out"),
                    },
-                   new ActionCommand(Action.CONVERT, null)
+                   new ActionCommand(Action.CONVERT_IS, null)
 
            );
        }
-       if (name.equals("Int constant")){
+       if (name.equals("Int Constant")){
            return new Node(
                    0,
                    0,
@@ -129,12 +129,12 @@ public class NodeHolder {
                    "Set X Position",
                    new InputHandle[]{
                            new InputHandle(HandleDataType.FLOW, "in"),
-                           new InputHandle(HandleDataType.INT, "amount")
+                           new InputHandle(HandleDataType.FLOAT, "amount")
                    },
                    new OutputHandle[]{
                            new OutputHandle(HandleDataType.FLOW, "out")
                    },
-                   new ActionCommand(Action.SET_X, Collections.singletonList(new Variable("_", new JsonPrimitive(10), VarType.INT)))//TODO: Change to float
+                   new ActionCommand(Action.SET_X, Collections.singletonList(new Variable("_", new JsonPrimitive(10), VarType.FLOAT)))
 
            );
        }
@@ -148,12 +148,12 @@ public class NodeHolder {
                    "Set Y Position",
                    new InputHandle[]{
                            new InputHandle(HandleDataType.FLOW, "in"),
-                           new InputHandle(HandleDataType.INT, "amount")
+                           new InputHandle(HandleDataType.FLOAT, "amount")
                    },
                    new OutputHandle[]{
                            new OutputHandle(HandleDataType.FLOW, "out")
                    },
-                   new ActionCommand(Action.SET_Y, Collections.singletonList(new Variable("_", new JsonPrimitive(10), VarType.INT)))//TODO: Change to float
+                   new ActionCommand(Action.SET_Y, Collections.singletonList(new Variable("_", new JsonPrimitive(10), VarType.FLOAT)))
 
            );
        }
@@ -167,15 +167,15 @@ public class NodeHolder {
                    "Set Position",
                    new InputHandle[]{
                            new InputHandle(HandleDataType.FLOW, "in"),
-                           new InputHandle(HandleDataType.INT, "X amount"),
-                           new InputHandle(HandleDataType.INT, "Y amount"),
+                           new InputHandle(HandleDataType.FLOAT, "X amount"),
+                           new InputHandle(HandleDataType.FLOAT, "Y amount"),
                    },
                    new OutputHandle[]{
                            new OutputHandle(HandleDataType.FLOW, "out")
                    },
                    new ActionCommand(Action.SET_P, Arrays.asList(
-                           new Variable("_input1",new JsonPrimitive(10), VarType.INT), //TODO: Change to float
-                           new Variable("_input2",new JsonPrimitive(10), VarType.INT)))
+                           new Variable("_input1",new JsonPrimitive(10), VarType.FLOAT),
+                           new Variable("_input2",new JsonPrimitive(10), VarType.FLOAT)))
 
            );
        }
@@ -189,12 +189,12 @@ public class NodeHolder {
                    "Move X Position",
                    new InputHandle[]{
                            new InputHandle(HandleDataType.FLOW, "in"),
-                           new InputHandle(HandleDataType.INT, "amount")
+                           new InputHandle(HandleDataType.FLOAT, "amount")
                    },
                    new OutputHandle[]{
                            new OutputHandle(HandleDataType.FLOW, "out")
                    },
-                   new ActionCommand(Action.MOVE_X, Collections.singletonList(new Variable("_", new JsonPrimitive(10), VarType.INT)))//TODO: Change to float
+                   new ActionCommand(Action.MOVE_X, Collections.singletonList(new Variable("_", new JsonPrimitive(10), VarType.FLOAT)))
 
            );
        }
@@ -208,12 +208,12 @@ public class NodeHolder {
                    "Move Y Position",
                    new InputHandle[]{
                            new InputHandle(HandleDataType.FLOW, "in"),
-                           new InputHandle(HandleDataType.INT, "amount")
+                           new InputHandle(HandleDataType.FLOAT, "amount")
                    },
                    new OutputHandle[]{
                            new OutputHandle(HandleDataType.FLOW, "out")
                    },
-                   new ActionCommand(Action.MOVE_Y, Collections.singletonList(new Variable("_", new JsonPrimitive(10), VarType.INT)))//TODO: Change to float
+                   new ActionCommand(Action.MOVE_Y, Collections.singletonList(new Variable("_", new JsonPrimitive(10), VarType.FLOAT)))
 
            );
        }
@@ -227,14 +227,14 @@ public class NodeHolder {
                    "Move Position",
                    new InputHandle[]{
                            new InputHandle(HandleDataType.FLOW, "in"),
-                           new InputHandle(HandleDataType.INT, "X amount"),
-                           new InputHandle(HandleDataType.INT, "Y amount"),
+                           new InputHandle(HandleDataType.FLOAT, "X amount"),
+                           new InputHandle(HandleDataType.FLOAT, "Y amount"),
                    },
                    new OutputHandle[]{
                            new OutputHandle(HandleDataType.FLOW, "out")
                    },
                    new ActionCommand(Action.MOVE_P, Arrays.asList(
-                           new Variable("_input1",new JsonPrimitive(10), VarType.INT), //TODO: Change to float
+                           new Variable("_input1",new JsonPrimitive(10), VarType.FLOAT),
                            new Variable("_input2",new JsonPrimitive(10), VarType.INT)))
 
            );
@@ -336,11 +336,162 @@ public class NodeHolder {
                    new InputHandle[]{},
                    new OutputHandle[]{
                            new OutputHandle(HandleDataType.FLOW, "tick"),
-                           new OutputHandle(HandleDataType.INT, "delta") //TODO: CHange to float
+                           new OutputHandle(HandleDataType.FLOAT, "delta")
                    },
                    new ActionCommand(Action.TICK, null)
            );
        }
+
+
+
+
+
+
+       //Float
+       if (name.equals("Float Variable get")){
+           return new Node(
+                   0,
+                   0,
+                   100,
+                   80,
+                   new Vector3f(0.2f, 0.2f, 1f),
+                   "get Float",
+                   new InputHandle[]{},
+                   new OutputHandle[]{
+                           new OutputHandle(HandleDataType.FLOAT, "value"),
+                   },
+                   new ActionCommand(Action.GET_VAR, Collections.singletonList(new Variable("test_int", new JsonPrimitive(42), VarType.FLOAT)))
+
+           );
+       }
+       if (name.equals("Float Variable set")){
+           return new Node(
+                   0,
+                   0,
+                   100,
+                   100,
+                   new Vector3f(0.2f, 0.2f, 1f),
+                   "set Float",
+                   new InputHandle[]{
+                           new InputHandle(HandleDataType.FLOW, "set"),
+                           new InputHandle(HandleDataType.FLOAT, "value")
+                   },
+                   new OutputHandle[]{
+                           new OutputHandle(HandleDataType.FLOW, "con"),
+                           new OutputHandle(HandleDataType.FLOAT, "out"),
+                   },
+                   new ActionCommand(Action.SET_VAR, Collections.singletonList(new Variable("test_int", new JsonPrimitive(128), VarType.FLOAT)))
+
+           );
+       }
+       if (name.equals("Float to String")){
+           return new Node(
+                   0,
+                   0,
+                   120,
+                   80,
+                   new Vector3f(0.2f, 0.2f, 1f),
+                   "Float to String",
+                   new InputHandle[]{
+                           new InputHandle(HandleDataType.FLOAT, "data")
+                   },
+                   new OutputHandle[]{
+                           new OutputHandle(HandleDataType.STRING, "out"),
+                   },
+                   new ActionCommand(Action.CONVERT_FS, null)
+
+           );
+       }
+       if (name.equals("Float Constant")){
+           return new Node(
+                   0,
+                   0,
+                   100,
+                   80,
+                   new Vector3f(0.2f, 0.2f, 1f),
+                   "float",
+                   new InputHandle[]{},
+                   new OutputHandle[]{
+                           new OutputHandle(HandleDataType.FLOAT, "value"),
+                   },
+                   new ActionCommand(Action.GET_CONSTANT, Collections.singletonList(new Variable("_", new JsonPrimitive(12), VarType.FLOAT)))
+
+           );
+       }
+       if (name.equals("Float Add")){
+           return new Node(
+                   0,0,80, 100,
+                   new Vector3f(0.2f,1,0.2f),
+                   "+ (Add)",
+                   new InputHandle[]{
+                           new InputHandle(HandleDataType.FLOAT, "in1"),
+                           new InputHandle(HandleDataType.FLOAT, "in2")
+                   },
+                   new OutputHandle[]{
+                           new OutputHandle(HandleDataType.FLOAT, "out")
+                   },
+                   new ActionCommand(Action.ADD, Arrays.asList(
+                           new Variable("_in1", new JsonPrimitive(42), VarType.FLOAT),
+                           new Variable("_in2", new JsonPrimitive(42), VarType.FLOAT)
+                   ))
+           );
+       }
+       if (name.equals("Float Subtract")){
+           return new Node(
+                   0,0,80, 100,
+                   new Vector3f(0.2f,1,0.2f),
+                   "- (Sub)",
+                   new InputHandle[]{
+                           new InputHandle(HandleDataType.FLOAT, "in1"),
+                           new InputHandle(HandleDataType.FLOAT, "in2")
+                   },
+                   new OutputHandle[]{
+                           new OutputHandle(HandleDataType.FLOAT, "out")
+                   },
+                   new ActionCommand(Action.SUB, Arrays.asList(
+                           new Variable("_in1", new JsonPrimitive(42), VarType.FLOAT),
+                           new Variable("_in2", new JsonPrimitive(42), VarType.FLOAT)
+                   ))
+           );
+       }
+       if (name.equals("Float Multiply")){
+           return new Node(
+                   0,0,80, 100,
+                   new Vector3f(0.2f,1,0.2f),
+                   "* (Mul)",
+                   new InputHandle[]{
+                           new InputHandle(HandleDataType.FLOAT, "in1"),
+                           new InputHandle(HandleDataType.FLOAT, "in2")
+                   },
+                   new OutputHandle[]{
+                           new OutputHandle(HandleDataType.FLOAT, "out")
+                   },
+                   new ActionCommand(Action.MUL, Arrays.asList(
+                           new Variable("_in1", new JsonPrimitive(42), VarType.FLOAT),
+                           new Variable("_in2", new JsonPrimitive(42), VarType.FLOAT)
+                   ))
+           );
+       }
+       if (name.equals("Float Divide")){
+           return new Node(
+                   0,0,80, 100,
+                   new Vector3f(0.2f,1,0.2f),
+                   "/ (Div)",
+                   new InputHandle[]{
+                           new InputHandle(HandleDataType.FLOAT, "in1"),
+                           new InputHandle(HandleDataType.FLOAT, "in2")
+                   },
+                   new OutputHandle[]{
+                           new OutputHandle(HandleDataType.FLOAT, "out")
+                   },
+                   new ActionCommand(Action.DIV, Arrays.asList(
+                           new Variable("_in1", new JsonPrimitive(42), VarType.FLOAT),
+                           new Variable("_in2", new JsonPrimitive(42), VarType.FLOAT)
+                   ))
+           );
+       }
+
+
        assert false : "Unavailable Node";
        return null;
    }
