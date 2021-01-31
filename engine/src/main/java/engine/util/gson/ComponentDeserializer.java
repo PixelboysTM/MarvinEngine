@@ -13,7 +13,7 @@ public class ComponentDeserializer implements JsonSerializer<Component>, JsonDes
         JsonElement element = jsonObject.get("properties");
 
         try {
-            return context.deserialize(element, Class.forName(type));
+            return context.deserialize(element, Class.forName(type));//TODO: Add Texture get source ref.
         }catch (ClassNotFoundException e){
             throw new JsonParseException("Unknown element type: " + type, e);
         }

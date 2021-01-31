@@ -83,22 +83,26 @@ public class ProjectPacker {
                 out.closeEntry();
             }
 
+
             for (String id : ResourceManager.textureIds()){
                 out.putNextEntry(new ZipEntry("assets/images/" + id + ".img"));
-                Texture tex = ResourceManager.getTexture(id);
-                //TODO: Continue here
-                byte[] bs = tex.getByteBuffer();
-                out.write(bs);
+                String p = System.getProperty("java.io.tmpdir") + "marvin\\im\\" + id + ".mim";
+                System.out.println(p);
+                File f = new File(p);
+                File parent = f.getParentFile();
+                if (!parent.exists() && !parent.mkdirs())
+                    throw new IllegalStateException("Coudlnt create dir");
+
+                InputStream in = new BufferedInputStream(new FileInputStream(f));
+
+                byte[] buffer = new byte[1024];
+                int lengthRead = 0;
+                while ((lengthRead = in.read(buffer)) > 0){
+                    out.write(buffer, 0, lengthRead);
+                    out.flush();
+                }
                 out.closeEntry();
-                out.putNextEntry(new ZipEntry("assets/images/" + id + ".id"));
-                JsonObject obj = new JsonObject();
-                obj.add("width", new JsonPrimitive(tex.getWidth()));
-                obj.add("height", new JsonPrimitive(tex.getHeight()));
-                obj.add("channels", new JsonPrimitive(tex.getChannels()));
-                Gson g = new GsonBuilder().setPrettyPrinting().create();
-                String t = g.toJson(obj);
-                out.write(t.getBytes(StandardCharsets.UTF_8));
-                out.closeEntry();
+                in.close();
             }
 
             out.close();
@@ -141,16 +145,29 @@ public class ProjectPacker {
                 } else {
                     System.out.println("file : " + entry.getName());
                     if (entry.getName().endsWith(".img")){
-                        byte[] b = new byte[1024];
-                        List<Byte> buf = new ArrayList<>();
-                        InputStream reader = file.getInputStream(entry);
-                        int length;
-                        while ((length = reader.read(b, 0, b.length)) != -1){
-                            for (int i = 0; i < b.length; i++) {
-                                buf.add(b[i]);
-                            }
+
+                        String temp = System.getProperty("java.io.tmpdir");// + "marvin\\im\\" + id + ".mim";
+                        String id = entry.getName();
+                        id = id.replace("assets/images/","");
+                        id = id.replace(".img", "");
+                        System.out.println(id);
+                        File f = new File(temp + "marvin\\im\\" + id + ".mim");
+                        File parent = f.getParentFile();
+                        if (!parent.exists() && !parent.mkdirs())
+                            throw new IllegalStateException("Coudlnt create dir");
+                        OutputStream out = new BufferedOutputStream(new FileOutputStream(f));
+
+                        byte[] buffer = new byte[1024];
+                        int lengthRead = 0;
+                        InputStream in = new BufferedInputStream( file.getInputStream(entry));
+                        while ((lengthRead = in.read(buffer)) > 0){
+                            out.write(buffer, 0, lengthRead);
+                            out.flush();
                         }
-                        imData.put(entry.getName(), buf);
+                        out.close();
+                        in.close();
+                        ResourceManager.addTexture(temp + "marvin\\im\\" + id + ".mim", id);
+
                         continue;
                     }
 
@@ -169,26 +186,18 @@ public class ProjectPacker {
             file.close();
             List<Tuple<String, String>> scenes = new ArrayList<>();
             List<Tuple<String, String>> scripts = new ArrayList<>();
-            List<Tuple<String, String>> images = new ArrayList<>();
             for (Tuple<String, String> t :
                     data) {
                 if (t.x.startsWith("scenes/"))
                     scenes.add(t);
                 else if(t.x.startsWith("scripts/"))
                     scripts.add(t);
-                else if (t.x.startsWith("assets/images/"))
-                    images.add(t);
             }
             for (int i = 0; i < scenes.size(); i++) {
                 handleFileData(scenes.get(i).x, scenes.get(i).y);
             }
             for (int i = 0; i < scripts.size(); i++) {
                 handleFileData(scripts.get(i).x, scripts.get(i).y);
-            }
-            for (int i = 0; i < images.size(); i++){
-                String dataName = images.get(i).x.replace(".id", ".img");
-                List<Byte> dataBytes = imData.get(dataName);;
-                handleImageData(images.get(i).x, images.get(i).y, dataBytes);
             }
 
         } catch (IOException e) {

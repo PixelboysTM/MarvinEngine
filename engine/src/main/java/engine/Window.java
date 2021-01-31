@@ -129,7 +129,7 @@ public class Window {
         //Make OpneGl context
         glfwMakeContextCurrent(glfwWindow);
         //Enable v-sync
-        glfwSwapInterval(1);
+        glfwSwapInterval(0); // V-Sync = 1
 
         //Make the window visible
         glfwShowWindow(glfwWindow);

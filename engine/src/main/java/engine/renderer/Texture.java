@@ -4,8 +4,6 @@ import org.lwjgl.BufferUtils;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
-import java.util.Collections;
-import java.util.Objects;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.stb.STBImage.*;
@@ -15,8 +13,6 @@ public class Texture {
     private String filepath;
     private transient int texID;
     private int width, height, channels;
-
-    private byte[] byteBuffer;
 
     public Texture() {
         texID = -1;
@@ -81,9 +77,6 @@ public class Texture {
 
     public void init(ByteBuffer data,int w, int h, int c, String id) {
         this.filepath = "custom_" + id;
-        ByteBuffer b2 = data.duplicate();
-        byteBuffer = new byte[b2.remaining()];
-        b2.get(byteBuffer);
 
 
         //Gen texture
@@ -153,9 +146,6 @@ public class Texture {
                 texture.getFilepath().equals(this.filepath);
     }
 
-    public byte[] getByteBuffer() {
-        return byteBuffer;
-    }
 
     public int getChannels() {
         return channels;

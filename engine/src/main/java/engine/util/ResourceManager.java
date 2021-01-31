@@ -4,12 +4,9 @@ import engine.renderer.Texture;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.PointerBuffer;
 
+import java.io.*;
 import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
 import java.util.*;
-
-import static org.lwjgl.stb.STBImage.stbi_load;
-import static org.lwjgl.stb.STBImage.stbi_set_flip_vertically_on_load;
 import static org.lwjgl.system.MemoryUtil.memAllocPointer;
 import static org.lwjgl.system.MemoryUtil.memFree;
 import static org.lwjgl.util.nfd.NativeFileDialog.*;
@@ -22,6 +19,18 @@ public class ResourceManager {
     }
     public static Texture getTexture(String id){
         return textures.getOrDefault(id, null);
+    }
+
+    public static boolean addTexture(String filepath, String id){
+        if (textures.containsKey(id)){
+            assert false : "Add replacement source option";
+            return false;
+        }
+
+        Texture t = new Texture();
+        t.init(filepath);
+        textures.put(id, t);
+        return false;
     }
     public static boolean addTextureFromData(String id, ByteBuffer data, int w, int h, int c){
         if (textures.containsKey(id)){
@@ -65,16 +74,41 @@ public class ResourceManager {
         }
 
 
-        IntBuffer w = BufferUtils.createIntBuffer(1);
-        IntBuffer h = BufferUtils.createIntBuffer(1);
-        IntBuffer ch = BufferUtils.createIntBuffer(1);
-        stbi_set_flip_vertically_on_load(true);
-        ByteBuffer f = stbi_load(path, w, h, ch, 0 );
+
 
         List<String> s = Arrays.asList(path.split("\\.")[0].replace("\\", "/").split("/"));
         Collections.reverse(s);
         String id = s.get(0);
-        ResourceManager.addTextureFromData(id, f,w.get(0),h.get(0),ch.get(0));
+        ResourceManager.addTexture(path, id);
+
+        File original = new File(path);
+        String p = System.getProperty("java.io.tmpdir") + "marvin\\im\\" + id + ".mim";
+        System.out.println(p);
+        File copied = new File(p);
+        File parent = copied.getParentFile();
+        if (!parent.exists() && !parent.mkdirs())
+            throw new IllegalStateException("Coudlnt create dir");
+        try {
+            InputStream in = new BufferedInputStream(
+                    new FileInputStream(original)
+            );
+            OutputStream out = new BufferedOutputStream(
+                    new FileOutputStream(copied)
+            );
+
+            byte[] buffer = new byte[1024];
+            int lengthRead = 0;
+            while ((lengthRead = in.read(buffer)) > 0){
+                out.write(buffer, 0, lengthRead);
+                out.flush();
+            }
+
+            in.close();
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         return id;
     }
     public static String[] textureIds(){

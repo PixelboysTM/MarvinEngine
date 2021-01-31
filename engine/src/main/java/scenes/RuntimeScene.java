@@ -58,7 +58,7 @@ public class RuntimeScene extends Scene{
         renderer.render();
 
         elapsed += dt;
-        if (true || elapsed > 0.03f){
+        if (true || elapsed > 0.03f){ // VM FPS Limit
             vm.setCurrentDt(elapsed);
             if  (vm.hasStepsLeft())
                 vm.step();
