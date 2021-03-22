@@ -1,1 +1,1 @@
-windmill-dark
+mkdocs-windmill-dark
